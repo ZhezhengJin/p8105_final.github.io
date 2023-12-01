@@ -1,0 +1,8 @@
+---
+title: "Birthweight and PM2.5 Concentration, SES, Racial, Gender Factors: Correlation among 5 NYC Boroughs"
+---
+
+### Motivation
+
+The motivation for a project exploring the correlation between birthweight and PM2.5 concentration, as well as socioeconomic, racial, and gender factors across the five boroughs of New York City, stems from a compelling public health imperative. Low birthweight is a critical indicator of neonatal health and future developmental outcomes. By examining the impact of fine particulate pollution, this project aims to uncover environmental health disparities that disproportionately affect underserved communities. It seeks to inform public health policy by highlighting the need for targeted interventions that could mitigate the adverse effects of air pollution on vulnerable populations, including pregnant women and newborns. The analysis of socioeconomic and racial factors will offer insights into the complex interplay between environment and social determinants of health, potentially guiding urban planning and healthcare resource allocation. 
+
