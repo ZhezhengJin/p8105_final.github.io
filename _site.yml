@@ -1,7 +1,6 @@
 name: "P8105 Final Project"
 output_dir: "."
 navbar:
-   title: "Home"
    left:
     - text: "Home"
       href: index.html
@@ -30,7 +29,7 @@ navbar:
       href: "mailto:zj2358@cumc.columbia.edu,kl3453@cumc.columbia.edu,nl2836@cumc.columbia.edu,dqn2104@cumc.columbia.edu"
 output: 
   html_document:
-    theme: united
+    theme: cosmo
     highlight: textmate
     toc: true
     toc_depth: 2
