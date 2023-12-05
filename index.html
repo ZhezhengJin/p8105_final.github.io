@@ -11,12 +11,12 @@
 
 
 
-<title>Birthweight and PM2.5 Concentration, SES, Racial, Gender Factors: Correlation among 5 NYC Boroughs</title>
+<title> Birthweight and PM2.5 Concentration, SES, Racial, Gender Factors:  Correlation among NYC Boroughs</title>
 
 <script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -33,6 +33,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -63,7 +64,6 @@ if (window.hljs) {
 
 
 
-<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -222,6 +222,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -332,7 +335,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="About.html">Project</a>
+      <a href="About.html">Birthweight and PM2.5 Concentration</a>
     </li>
     <li>
       <a href="About_Us.html">Us</a>
@@ -342,19 +345,13 @@ div.tocify {
 <li>
   <a href="report.html">Report</a>
 </li>
-<li>
-  <a href="video.html">Video</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Analysis
+    Data Analysis
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="introduction.html">Introduction</a>
-    </li>
     <li>
       <a href="Data.html">Data</a>
     </li>
@@ -362,7 +359,7 @@ div.tocify {
       <a href="eda.html">EDA</a>
     </li>
     <li>
-      <a href="Regression.html">Regression</a>
+      <a href="Regression.html">Regression Model</a>
     </li>
     <li>
       <a href="results.html">Results Summary</a>
@@ -374,6 +371,12 @@ div.tocify {
 </li>
 <li>
   <a href="shiny-app-url">Shiny App</a>
+</li>
+<li>
+  <a href="https://www.youtube.com/watch?v=nDCHMyNOjHM">
+    <span class="fa fa-youtube fa-lg"></span>
+     
+  </a>
 </li>
 <li>
   <a href="https://github.com/ZhezhengJin/p8105_final.github.io">
@@ -394,30 +397,90 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore">Birthweight and PM2.5 Concentration, SES,
-Racial, Gender Factors: Correlation among 5 NYC Boroughs</h1>
+
+<h1 class="title toc-ignore"><center><br />
+Birthweight and PM2.5 Concentration, SES, Racial, Gender Factors:<br/>
+Correlation among NYC Boroughs</h1>
 
 </div>
 
 
+<p><br></p>
+<center>
+<img src="images/homepage.jpg" />
+</center>
+<div id="project-introduction" class="section level3">
+<h3>Project Introduction</h3>
+<p>Welcome to our website! <br> For this project, we will mainly explore
+the correlation between birthweight of newborns and air pollution
+(focusing on PM2.5 concentration) with other factors like SES, racial,
+and gender across the New York State. <br> This project website will
+contain deliverables include:</p>
+<ul>
+<li>About page</li>
+<li>Project Report</li>
+<li>Data Analysis</li>
+<li>R shiny APP</li>
+<li>Introduction video</li>
+</ul>
+<p><br/></p>
+</div>
 <div id="motivation" class="section level3">
 <h3>Motivation</h3>
-<p>The motivation for a project exploring the correlation between
-birthweight and PM2.5 concentration, as well as socioeconomic, racial,
-and gender factors across the five boroughs of New York City, stems from
-a compelling public health imperative. Low birthweight is a critical
-indicator of neonatal health and future developmental outcomes. By
-examining the impact of fine particulate pollution, this project aims to
-uncover environmental health disparities that disproportionately affect
-underserved communities. It seeks to inform public health policy by
-highlighting the need for targeted interventions that could mitigate the
-adverse effects of air pollution on vulnerable populations, including
-pregnant women and newborns. The analysis of socioeconomic and racial
-factors will offer insights into the complex interplay between
-environment and social determinants of health, potentially guiding urban
-planning and healthcare resource allocation.</p>
+<p>Our motivation for this environmental health project lies in the
+urgent need to address the public health challenges posed by
+environmental factors, specifically PM2.5 air pollution, and their
+effects on neonatal birthweight within the diverse urban tapestry of New
+York State. Recognizing low birthweight as a critical marker of early
+health and future developmental trajectories, we aim to uncover the
+hidden dimensions of environmental health disparities. The analysis of
+socioeconomic and racial factors will offer insights into the complex
+interplay between environment and social determinants of health,
+potentially guiding urban planning and healthcare resource
+allocation.</p>
+<p><br/></p>
+</div>
+<div id="pm-2.5-the-hazards" class="section level3">
+<h3>PM 2.5 &amp; the hazards</h3>
+<center>
+<p>Polluted air can affect human health and the environment. A key
+indicator of air quality is the amount of PM2.5 in the air. PM stands
+for particulate matter and the 2.5 refers to size.These particles are
+much smaller than a grain of sand or a human hair, making them small
+enough to be deeply inhaled into the lungs. High levels of PM2.5 can
+adversely affect sensitive individuals, including young children, the
+elderly, pregnant women, and people with allergies, heart, or lung
+conditions. Such individuals may experience symptoms like wheezing,
+coughing, chest tightness, or difficulty breathing when exposed to high
+PM2.5 levels.</p>
+<pre class="r"><code>htmltools::tags$iframe(
+  width = &quot;70%&quot;, 
+  height = &quot;315&quot;, 
+  src = &quot;https://www.youtube.com/embed/nDCHMyNOjHM&quot;,
+  frameborder = &quot;0&quot;, 
+  allowfullscreen = TRUE
+)</code></pre>
+<iframe width="70%" height="315" src="https://www.youtube.com/embed/nDCHMyNOjHM" frameborder="0" allowfullscreen="TRUE"></iframe>
+</center>
+<p><br/></p>
+</div>
+<div id="contributors-unis" class="section level3">
+<h3>Contributors &amp; UNIs</h3>
+<ul>
+<li>Ngan Le (nl2836)</li>
+<li>Kevin Liu (kl3453)</li>
+<li>Zhezheng Jin (zj2358)</li>
+<li>Duong Nguyen (dqn2104)</li>
+</ul>
 </div>
 
 
@@ -455,6 +518,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
