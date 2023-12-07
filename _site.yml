@@ -24,7 +24,7 @@ navbar:
       - text: "Conclusion"
         href: conclusion.html
     - text: "Shiny App"
-      href: shiny-app-url
+      href: https://zj2358.shinyapps.io/birthweight_shiny/
     - icon: fa-youtube fa-lg
       href: https://www.youtube.com/watch?v=nDCHMyNOjHM
     - icon: fa-github fa-lg
