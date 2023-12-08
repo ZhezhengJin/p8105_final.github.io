@@ -1,0 +1,297 @@
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(rvest)
+library(plotly)
+library(knitr)
+library(sjPlot)
+library(sjmisc)
+library(sjlabelled)
+```
+
+# Data
+
+_Source, scraping method, cleaning, etc._
+
+#### Data Import
+```{r}
+lowbirthweight <- read_csv("csv_NYC_lowbirthweight.csv")
+pm2_5 <- read_csv("pm2.5.csv")
+edu_NY <- read_excel("Edu_NY.xlsx")
+race_NY <- read_excel("Race_NY.xlsx")
+HHincome_NY <- read_excel("HHincome_NY.xlsx")
+Age_NY <- read_excel("Age_NY.xlsx")
+Sex_NY <- read_excel("Sex_NY.xlsx")
+health <- read_excel("chir_current_data.xlsx")
+uscounties <- read_csv("uscounties.csv") #Simplemaps.com
+
+```
+
+#### Data Wrangling  
+
+##### __PM2.5 Dataset__
+```{r}
+pm2_5 <- pm2_5 %>% 
+  janitor::clean_names()%>%
+  select (county,value) %>%
+  rename (annual_pm2.5 = "value")
+```
+The dataset is obtained from EPH Tracking Website from CDC (https://ephtracking.cdc.gov/DataExplorer/). This has `r nrow(pm2_5)` rows and `r ncol(pm2_5)` columns of data. In which, 2 variables are:  
+  - `county`: NY county name   
+  - `annual_pm2.5`: annual estimated PM2.5 concentration at each county (ug/m^3)
+
+##### __Demographic Dataset__
+The following set of demographic datasets is obtained from Census Reporter webpage (https://censusreporter.org/).
+
+
+
+##### Education Attainment
+```{r}
+edu <- edu_NY %>% 
+  janitor::clean_names()%>%
+  mutate (percentage_high_education = (bach_male+master_male+prof_male+doct_male+bach_female+master_female+prof_female+doct_female)/total) %>%
+  filter(str_detect (name, " County, NY")) %>% 
+  mutate(county = str_replace (name, " County, NY", "")) %>%
+  select(county,percentage_high_education) %>%
+  mutate(county = str_replace (county, "St.", "St")) %>%
+  mutate(county = str_replace (county, "Stuben", "Steuben"))%>%
+  select(county,percentage_high_education)
+```  
+This has `r nrow(edu)` rows and `r ncol(edu)` columns of data. In which, 2 variables are:  
+  - `county`: NY county name   
+  - `percentage_high_education`: percentage of population who finished a higher education level (higher than a bachelor degree)
+
+
+
+##### Ethinicity
+```{r}  
+race_non_hisp_white <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "White Non-Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_non_hisp_white") %>% 
+  select (county,percent_non_hisp_white) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_non_hisp_white ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_non_hisp_black <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "Black Non-Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_non_hisp_black") %>% 
+  select (county,percent_non_hisp_black) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_non_hisp_black ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_hisp_white <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "White Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_hisp_white") %>% 
+  select (county,percent_hisp_white) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_hisp_white ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_hisp_black <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "Black Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_hisp_black") %>% 
+  select (county,percent_hisp_black) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_hisp_black ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_merge <- race_non_hisp_white %>%
+  inner_join(race_non_hisp_black, by = "county") %>%
+  inner_join(race_hisp_white, by = "county") %>%
+  inner_join(race_hisp_black, by = "county")
+
+race_merge <- race_merge %>% 
+  mutate (percent_other = 1 - percent_non_hisp_white - percent_non_hisp_black - percent_hisp_white - percent_hisp_black)
+```
+This has `r nrow(race_merge)` rows and `r ncol(race_merge)` columns of data. In which, 6 variables are:  
+  - `county`: NY county name   
+  - `percent_non_hisp_white`: percentage of population who are identified as Non-Hispanic White  
+  - `percent_non_hisp_black`: percentage of population who are identified as Non-Hispanic Black    
+  - `percent_hisp_white`: percentage of population who are identified as Hispanic White  
+  - `percent_hisp_black`: percentage of population who are identified as Hispanic Black  
+  - `percent_other`: percentage of population who are identified as any other ethinic groups    
+
+
+
+
+##### Household Income
+```{r}
+income <- HHincome_NY %>%
+  janitor::clean_names() %>% 
+  filter (x1 == "percent_high_income") %>%
+   pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_high_income") %>%
+  select (county,percent_high_income) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_high_income ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+```
+This has `r nrow(income)` rows and `r ncol(income)` columns of data. In which, 2 variables are:  
+  - `county`: NY county name   
+  - `percent_high_income`: percentage of population who are at higher income households (>$75,000 annually)
+
+
+##### Median Age
+```{r}
+age <- Age_NY %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "median_age") %>%
+  select (county,median_age) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,median_age ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+```
+This has `r nrow(age)` rows and `r ncol(age)` columns of data. In which, 2 variables are:  
+  - `county`: NY county name   
+  - `median_age`: median age of the population at each county  
+
+
+
+##### Sex
+```{r}
+sex <- Sex_NY %>% 
+  janitor::clean_names() %>% 
+  filter (x1 == "Male:") %>%
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_male") %>%
+  select (county,percent_male) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_male ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+```
+This has `r nrow(sex)` rows and `r ncol(sex)` columns of data. In which, 2 variables are:  
+  - `county`: NY county name   
+  - `percent_male`: percentage of population who are identified as male  
+
+##### Low Birthweight Data 
+```{r}
+lowbirthweight <- lowbirthweight %>% 
+  janitor::clean_names()%>%
+  select (region_county, percentage)%>%
+  rename (county = "region_county", percent_lowbirthweight = "percentage") 
+```
+This has `r nrow(lowbirthweight)` rows and `r ncol(lowbirthweight)` columns of data. In which, 2 variables are:  
+  - `county`: NY county name   
+  - `percent_lowbirthweight`: percentage of children being born being identified as low birth weight (<2,500g) (https://www.health.ny.gov/)
+
+##### Health Indicator Dataset 
+The following dataset is obtained from New York State Department of Health (https://www.health.ny.gov/) that contains 4 different health indicators that will complement with the low birthweight. These 5 will act as our outcomes of interest for our regression models.
+
+```{r}
+health <- health %>%
+  janitor::clean_names()%>%
+  select (geographic_area,indicator_title,topic_area,rate_percent,measurement) %>%
+  filter( str_detect (geographic_area, " County")) %>% 
+  mutate (county = str_replace (geographic_area, " County", "")) %>%
+  select (county, everything()) %>%
+  select (-geographic_area) %>%
+  filter(topic_area == "Cancer Indicators" | topic_area == "Respiratory Disease Indicators" | topic_area == "Cardiovascular Disease Indicators" | topic_area == "Maternal and Infant Health Indicators")
+  
+cancer <- health %>% 
+  filter (topic_area == "Cancer Indicators") %>% 
+  filter (indicator_title == "All cancer incidence rate per 100,000") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>% 
+  rename (cancer_mortality_per_100k = "rate_percent")
+
+resp <- health %>%
+  filter (topic_area == "Respiratory Disease Indicators") %>%
+  filter (indicator_title == "Asthma hospitalization rate per 10,000") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>% 
+  rename (asthma_hosp_rate_per_10k = "rate_percent")
+
+cardio <- health %>%
+  filter (topic_area == "Cardiovascular Disease Indicators") %>%
+  filter (indicator_title == "Cardiovascular disease hospitalization rate per 10,000") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>% 
+  rename (cardio_hosp_rate_per_10k = "rate_percent")
+
+maternal <- health %>%
+  filter (topic_area == "Maternal and Infant Health Indicators") %>%
+  filter (indicator_title == "Percentage of premature births with <37 weeks gestation") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>% 
+  rename (premature_percentage = "rate_percent")
+
+```
+They are:   
+  - `cancer_mortality_per_100k`: percentage of cancer mortality per 100 thousands people in each NY county (Cancer Indicator)    
+  - `asthma_hosp_rate_per_10k`: percentage of asthma hospitalization per 10 thousands people in each NY county (Respiratory Disease Indicator)     
+  - `cardio_hosp_rate_per_10k`": percentage of cardiovascular-disease-related hospitalization per 10 thousands people in each NY county (Cardiovascular Disease Indicator)   
+  - `premature_percentage`: percentage of children being born prematurely (<37  gestational weeks) in each NY county
+
+##### Merge dataset:
+Here we perform `inner_join()` to create 2 bigger datasets `health_merge` and `demographic_merge`. Then, we join them with our `lowbirthweight` & `pm2_5` tp make a finalized data frame called `merge`. And, we will use this for regression model. 
+```{r}
+health_merge <- maternal %>% 
+  inner_join(cancer, by = "county") %>%
+  inner_join(resp, by = "county") %>% 
+  inner_join(cardio, by = "county") 
+
+demographic_merge <- age %>%
+  inner_join(sex,  by = "county") %>%
+  inner_join(income, by = "county") %>% 
+  inner_join(race_merge, by = "county") %>% 
+  inner_join(edu, by = "county") %>%
+  mutate(county = str_replace (county, "St ", "St. "))
+  
+
+merge <- lowbirthweight %>% 
+  inner_join(pm2_5, by = "county") %>%
+  inner_join(health_merge, by = "county") %>% 
+  inner_join(demographic_merge, by = "county") 
+
+merge <- merge %>% 
+  select (county, annual_pm2.5,everything())%>%
+  mutate(asthma_hosp_rate_per_10k = as.numeric(asthma_hosp_rate_per_10k))%>%
+  mutate(cardio_hosp_rate_per_10k = as.numeric(cardio_hosp_rate_per_10k)) %>%
+  mutate(premature_percentage = as.numeric(premature_percentage))%>%
+  mutate(cancer_mortality_per_100k = as.numeric(cancer_mortality_per_100k))
+
+```
+
+##### Making Map File
+```{r}
+uscounties <- uscounties %>% 
+  filter (state_id == "NY") %>%
+  select (county, lat, lng)
+
+map <- merge %>% 
+  inner_join(uscounties, by ="county")
+
+write.csv(map, "NY_map.csv", row.names = FALSE)
+
+```
