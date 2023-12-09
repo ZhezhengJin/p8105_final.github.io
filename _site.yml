@@ -11,8 +11,10 @@ navbar:
       href: Related.html
     - text: "Our Data"
       href: Data.html
-    - text: "Our Data Visualized"
+    - text: "Data Visualized"
       href: EDA.html
+    - text: "Discussion"
+      href: Disscussion.html
     - text: "Shiny App"
       href: https://zj2358.shinyapps.io/birthweight_shiny/
     - icon: fa-github fa-lg
