@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -327,29 +329,23 @@ div.tocify {
         
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Report
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="Report.html">Full Lab Report</a>
-    </li>
-    <li>
-      <a href="Motivation.html">Motivation</a>
-    </li>
-    <li>
-      <a href="Related.html">Inspiration</a>
-    </li>
-    <li>
-      <a href="Data.html">Our Data</a>
-    </li>
-    <li>
-      <a href="EDA.html">Our Data Visualized</a>
-    </li>
-  </ul>
+        <li>
+  <a href="Report.html">Project Report</a>
+</li>
+<li>
+  <a href="Motivation.html">Motivation</a>
+</li>
+<li>
+  <a href="Related.html">Inspiration</a>
+</li>
+<li>
+  <a href="Data.html">Our Data</a>
+</li>
+<li>
+  <a href="EDA.html">Data Visualized</a>
+</li>
+<li>
+  <a href="Discussion.html">Discussion</a>
 </li>
 <li>
   <a href="https://zj2358.shinyapps.io/birthweight_shiny/">Shiny App</a>
@@ -381,63 +377,582 @@ div.tocify {
 </div>
 
 
-<div id="data" class="section level1">
-<h1>Data</h1>
-<p><em>Source, scraping method, cleaning, etc.</em></p>
-<div id="data-import" class="section level4">
-<h4>Data Import</h4>
-<pre class="r"><code>lowbirthweight &lt;- read_csv(&quot;csv_NYC_lowbirthweight.csv&quot;)</code></pre>
-<pre><code>## Rows: 87 Columns: 7
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (5): Region/County, 2018, 2019, 2020, Total
-## dbl (1): Percentage
-## num (1): Average births
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>pm2_5 &lt;- read_csv(&quot;pm2.5.csv&quot;)</code></pre>
-<pre><code>## New names:
-## Rows: 62 Columns: 8
-## ── Column specification
-## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
-## (3): State, County, Data Comment dbl (4): StateFIPS, CountyFIPS, Year, Value
-## lgl (1): ...8
-## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## • `` -&gt; `...8`</code></pre>
-<pre class="r"><code>edu_NY &lt;- read_excel(&quot;Edu_NY.xlsx&quot;)
-race_NY &lt;- read_excel(&quot;Race_NY.xlsx&quot;)</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...1`</code></pre>
-<pre class="r"><code>HHincome_NY &lt;- read_excel(&quot;HHincome_NY.xlsx&quot;)</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...1`</code></pre>
-<pre class="r"><code>Age_NY &lt;- read_excel(&quot;Age_NY.xlsx&quot;)</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...1`</code></pre>
-<pre class="r"><code>Sex_NY &lt;- read_excel(&quot;Sex_NY.xlsx&quot;)</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...1`</code></pre>
-<pre class="r"><code>health &lt;- read_excel(&quot;chir_current_data.xlsx&quot;)
+<style type="text/css">
+/* Style for the main tabs */
+.nav-tabs > li > a {
+  background-color: #A3C4E5; 
+  color: #5F5B57; 
+}
+
+/* Style for the active main tab */
+.nav-tabs > li.active > a {
+  background-color: #4276AA; 
+  color: #ffffff; 
+}
+
+/* Style for the sub-tabs */
+.tab-content .tab-pane .nav > li > a {
+  background-color: #D2D2D2; 
+  color: #3E3D3D; 
+}
+
+/* Style for the active sub-tab */
+.tab-content .tab-pane .nav > li.active > a {
+  background-color: #6D6D6D; 
+  color: #ffffff; 
+}
+</style>
+<pre><code>
+
+# Data
+
+_Source, scraping method, cleaning, etc._
+
+## Data Import
+
+Click `show` on the right to view the code chunk for data importing.
+
+```r
+lowbirthweight &lt;- read_csv(&quot;csv_NYC_lowbirthweight.csv&quot;)
+pm2_5 &lt;- read_csv(&quot;pm2.5.csv&quot;)
+edu_NY &lt;- read_excel(&quot;Edu_NY.xlsx&quot;)
+race_NY &lt;- read_excel(&quot;Race_NY.xlsx&quot;)
+HHincome_NY &lt;- read_excel(&quot;HHincome_NY.xlsx&quot;)
+Age_NY &lt;- read_excel(&quot;Age_NY.xlsx&quot;)
+Sex_NY &lt;- read_excel(&quot;Sex_NY.xlsx&quot;)
+health &lt;- read_excel(&quot;chir_current_data.xlsx&quot;)
 uscounties &lt;- read_csv(&quot;uscounties.csv&quot;) #Simplemaps.com</code></pre>
-<pre><code>## Rows: 3143 Columns: 9
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (6): county, county_ascii, county_full, county_fips, state_id, state_name
-## dbl (3): lat, lng, population
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-<div id="data-wrangling" class="section level4">
-<h4>Data Wrangling</h4>
-<div id="pm2.5-dataset" class="section level5">
-<h5><strong>PM2.5 Dataset</strong></h5>
+<p>9 data files are obtained from publicly available sources online.
+These will be imported, wrangled properly, and merged to create a
+complete data for further analysis.</p>
+<div id="data-wrangling" class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">Data Wrangling</h2>
+<p>Click <code>show</code> on the right to view the code chunk for data
+importing.</p>
+<div id="pm2.5-dataset" class="section level3">
+<h3>PM2.5 Dataset</h3>
 <pre class="r"><code>pm2_5 &lt;- pm2_5 %&gt;% 
   janitor::clean_names()%&gt;%
   select (county,value) %&gt;%
-  rename (annual_pm2.5 = &quot;value&quot;)</code></pre>
+  rename (annual_pm2.5 = &quot;value&quot;)
+
+pm2_5 %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+annual_pm2.5
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+7.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+3.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St. Lawrence
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+9.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>The dataset is obtained from EPH Tracking Website from CDC (<a
 href="https://ephtracking.cdc.gov/DataExplorer/"
 class="uri">https://ephtracking.cdc.gov/DataExplorer/</a>). This has 62
@@ -446,14 +961,13 @@ rows and 2 columns of data. In which, 2 variables are:<br />
 - <code>annual_pm2.5</code>: annual estimated PM2.5 concentration at
 each county (ug/m^3)</p>
 </div>
-<div id="demographic-dataset" class="section level5">
-<h5><strong>Demographic Dataset</strong></h5>
+<div id="demographic-dataset" class="section level3 tabset tabset-fade">
+<h3 class="tabset tabset-fade">Demographic Dataset</h3>
 <p>The following set of demographic datasets is obtained from Census
 Reporter webpage (<a href="https://censusreporter.org/"
 class="uri">https://censusreporter.org/</a>).</p>
-</div>
-<div id="education-attainment" class="section level5">
-<h5>Education Attainment</h5>
+<div id="education-attainment" class="section level4">
+<h4>Education Attainment</h4>
 <pre class="r"><code>edu &lt;- edu_NY %&gt;% 
   janitor::clean_names()%&gt;%
   mutate (percentage_high_education = (bach_male+master_male+prof_male+doct_male+bach_female+master_female+prof_female+doct_female)/total) %&gt;%
@@ -462,15 +976,533 @@ class="uri">https://censusreporter.org/</a>).</p>
   select(county,percentage_high_education) %&gt;%
   mutate(county = str_replace (county, &quot;St.&quot;, &quot;St&quot;)) %&gt;%
   mutate(county = str_replace (county, &quot;Stuben&quot;, &quot;Steuben&quot;))%&gt;%
-  select(county,percentage_high_education)</code></pre>
+  select(county,percentage_high_education)
+
+edu %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percentage_high_education
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+0.443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+0.224
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+0.209
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+0.289
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+0.200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+0.222
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+0.233
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+0.183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+0.254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+0.349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+0.281
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+0.230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+0.377
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+0.359
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+0.305
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+0.216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+0.182
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+0.220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+0.256
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+0.205
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+0.214
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+0.243
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+0.395
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+0.188
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+0.289
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+0.262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+0.400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+0.192
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+0.475
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+0.626
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+0.263
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+0.262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+0.365
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+0.375
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+0.314
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+0.172
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+0.208
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+0.333
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+0.415
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+0.339
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+0.343
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+0.349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+0.420
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St Lawrence
+</td>
+<td style="text-align:right;">
+0.236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+0.427
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+0.333
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+0.232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+0.243
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+0.215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+0.255
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+0.383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+0.270
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+0.258
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+0.553
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+0.345
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+0.331
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+0.206
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+0.244
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+0.506
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+0.181
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+0.245
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This has 62 rows and 2 columns of data. In which, 2 variables
 are:<br />
 - <code>county</code>: NY county name<br />
 - <code>percentage_high_education</code>: percentage of population who
 finished a higher education level (higher than a bachelor degree)</p>
 </div>
-<div id="ethinicity" class="section level5">
-<h5>Ethinicity</h5>
+<div id="ethnicity" class="section level4">
+<h4>Ethnicity</h4>
 <pre class="r"><code>race_non_hisp_white &lt;- race_NY %&gt;% 
   janitor::clean_names()%&gt;%
   filter( x1 == &quot;White Non-Hispanic&quot;) %&gt;% 
@@ -529,7 +1561,1281 @@ race_merge &lt;- race_non_hisp_white %&gt;%
   inner_join(race_hisp_black, by = &quot;county&quot;)
 
 race_merge &lt;- race_merge %&gt;% 
-  mutate (percent_other = 1 - percent_non_hisp_white - percent_non_hisp_black - percent_hisp_white - percent_hisp_black)</code></pre>
+  mutate (percent_other = 1 - percent_non_hisp_white - percent_non_hisp_black - percent_hisp_white - percent_hisp_black)
+
+race_merge %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_non_hisp_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_non_hisp_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_hisp_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_hisp_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_other
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+0.710
+</td>
+<td style="text-align:right;">
+0.114
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.142
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.031
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+0.285
+</td>
+<td style="text-align:right;">
+0.109
+</td>
+<td style="text-align:right;">
+0.060
+</td>
+<td style="text-align:right;">
+0.456
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+0.824
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.105
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+0.897
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.076
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+0.888
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.059
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+0.865
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.033
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.074
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+0.853
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.072
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+0.897
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+0.848
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.089
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+0.914
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+0.912
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+0.699
+</td>
+<td style="text-align:right;">
+0.099
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.141
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+0.746
+</td>
+<td style="text-align:right;">
+0.124
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.107
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+0.912
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+0.811
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.129
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+0.906
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+0.900
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+0.838
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:right;">
+0.035
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.070
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+0.921
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+0.932
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.045
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+0.809
+</td>
+<td style="text-align:right;">
+0.055
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.093
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+0.367
+</td>
+<td style="text-align:right;">
+0.286
+</td>
+<td style="text-align:right;">
+0.054
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.274
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+0.946
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.032
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+0.895
+</td>
+<td style="text-align:right;">
+0.026
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.060
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+0.917
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+0.698
+</td>
+<td style="text-align:right;">
+0.140
+</td>
+<td style="text-align:right;">
+0.041
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.113
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+0.794
+</td>
+<td style="text-align:right;">
+0.026
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.120
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+0.583
+</td>
+<td style="text-align:right;">
+0.110
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+0.467
+</td>
+<td style="text-align:right;">
+0.121
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.324
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+0.845
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.071
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+0.811
+</td>
+<td style="text-align:right;">
+0.057
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.101
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+0.760
+</td>
+<td style="text-align:right;">
+0.103
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+0.891
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.064
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+0.622
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+0.085
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+0.857
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.021
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+0.928
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+0.904
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+0.764
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.133
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+0.246
+</td>
+<td style="text-align:right;">
+0.168
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.486
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+0.820
+</td>
+<td style="text-align:right;">
+0.061
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.094
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+0.596
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+<td style="text-align:right;">
+0.097
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.206
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+0.629
+</td>
+<td style="text-align:right;">
+0.108
+</td>
+<td style="text-align:right;">
+0.065
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St Lawrence
+</td>
+<td style="text-align:right;">
+0.917
+</td>
+<td style="text-align:right;">
+0.025
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+0.894
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.069
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+0.716
+</td>
+<td style="text-align:right;">
+0.094
+</td>
+<td style="text-align:right;">
+0.024
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.162
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+0.910
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.059
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+0.944
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+0.879
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+0.929
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+0.664
+</td>
+<td style="text-align:right;">
+0.069
+</td>
+<td style="text-align:right;">
+0.098
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.162
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+0.702
+</td>
+<td style="text-align:right;">
+0.080
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.147
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+0.943
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.037
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+0.769
+</td>
+<td style="text-align:right;">
+0.035
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.168
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+0.760
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.139
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+0.930
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.043
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+0.911
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+0.889
+</td>
+<td style="text-align:right;">
+0.021
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.071
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+0.524
+</td>
+<td style="text-align:right;">
+0.133
+</td>
+<td style="text-align:right;">
+0.075
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.255
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+0.888
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+0.948
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This has 62 rows and 6 columns of data. In which, 6 variables
 are:<br />
 - <code>county</code>: NY county name<br />
@@ -544,8 +2850,8 @@ identified as Hispanic Black<br />
 - <code>percent_other</code>: percentage of population who are
 identified as any other ethinic groups</p>
 </div>
-<div id="household-income" class="section level5">
-<h5>Household Income</h5>
+<div id="household-income" class="section level4">
+<h4>Household Income</h4>
 <pre class="r"><code>income &lt;- HHincome_NY %&gt;%
   janitor::clean_names() %&gt;% 
   filter (x1 == &quot;percent_high_income&quot;) %&gt;%
@@ -557,15 +2863,1289 @@ identified as any other ethinic groups</p>
   separate(county, into = c(&quot;county&quot;, &quot;x&quot;), sep = &quot;_county_&quot;) %&gt;%
   select (county,percent_high_income ) %&gt;%
   mutate(county = str_replace (county, &quot;_&quot;, &quot; &quot;)) %&gt;%
-  mutate_at(vars(county), str_to_title)</code></pre>
+  mutate_at(vars(county), str_to_title)
+
+race_merge %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_non_hisp_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_non_hisp_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_hisp_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_hisp_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_other
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+0.710
+</td>
+<td style="text-align:right;">
+0.114
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.142
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.031
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+0.285
+</td>
+<td style="text-align:right;">
+0.109
+</td>
+<td style="text-align:right;">
+0.060
+</td>
+<td style="text-align:right;">
+0.456
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+0.824
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.105
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+0.897
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.076
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+0.888
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.059
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+0.865
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.033
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.074
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+0.853
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.072
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+0.897
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+0.848
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.089
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+0.914
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+0.912
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+0.699
+</td>
+<td style="text-align:right;">
+0.099
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.141
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+0.746
+</td>
+<td style="text-align:right;">
+0.124
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.107
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+0.912
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+0.811
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.129
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+0.906
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+0.900
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+0.838
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:right;">
+0.035
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.070
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+0.921
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+0.932
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.045
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+0.809
+</td>
+<td style="text-align:right;">
+0.055
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.093
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+0.367
+</td>
+<td style="text-align:right;">
+0.286
+</td>
+<td style="text-align:right;">
+0.054
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.274
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+0.946
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.032
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+0.895
+</td>
+<td style="text-align:right;">
+0.026
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.060
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+0.917
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+0.698
+</td>
+<td style="text-align:right;">
+0.140
+</td>
+<td style="text-align:right;">
+0.041
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.113
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+0.794
+</td>
+<td style="text-align:right;">
+0.026
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.120
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+0.583
+</td>
+<td style="text-align:right;">
+0.110
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+0.467
+</td>
+<td style="text-align:right;">
+0.121
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.324
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+0.845
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.071
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+0.811
+</td>
+<td style="text-align:right;">
+0.057
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.101
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+0.760
+</td>
+<td style="text-align:right;">
+0.103
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+0.891
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.064
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+0.622
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+0.085
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+0.857
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.021
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+0.928
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+0.904
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+0.764
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.133
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+0.246
+</td>
+<td style="text-align:right;">
+0.168
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.486
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+0.820
+</td>
+<td style="text-align:right;">
+0.061
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.094
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+0.596
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+<td style="text-align:right;">
+0.097
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.206
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+0.629
+</td>
+<td style="text-align:right;">
+0.108
+</td>
+<td style="text-align:right;">
+0.065
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St Lawrence
+</td>
+<td style="text-align:right;">
+0.917
+</td>
+<td style="text-align:right;">
+0.025
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+0.894
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.069
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+0.716
+</td>
+<td style="text-align:right;">
+0.094
+</td>
+<td style="text-align:right;">
+0.024
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.162
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+0.910
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.059
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+0.944
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+0.879
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+0.929
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+0.664
+</td>
+<td style="text-align:right;">
+0.069
+</td>
+<td style="text-align:right;">
+0.098
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.162
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+0.702
+</td>
+<td style="text-align:right;">
+0.080
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.147
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+0.943
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.037
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+0.769
+</td>
+<td style="text-align:right;">
+0.035
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.168
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+0.760
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.139
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+0.930
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.043
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+0.911
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+0.889
+</td>
+<td style="text-align:right;">
+0.021
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.071
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+0.524
+</td>
+<td style="text-align:right;">
+0.133
+</td>
+<td style="text-align:right;">
+0.075
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.255
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+0.888
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+0.948
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This has 62 rows and 2 columns of data. In which, 2 variables
 are:<br />
 - <code>county</code>: NY county name<br />
 - <code>percent_high_income</code>: percentage of population who are at
 higher income households (&gt;$75,000 annually)</p>
 </div>
-<div id="median-age" class="section level5">
-<h5>Median Age</h5>
+<div id="median-age" class="section level4">
+<h4>Median Age</h4>
 <pre class="r"><code>age &lt;- Age_NY %&gt;% 
   janitor::clean_names() %&gt;% 
   pivot_longer(
@@ -576,15 +4156,533 @@ higher income households (&gt;$75,000 annually)</p>
   separate(county, into = c(&quot;county&quot;, &quot;x&quot;), sep = &quot;_county_&quot;) %&gt;%
   select (county,median_age ) %&gt;%
   mutate(county = str_replace (county, &quot;_&quot;, &quot; &quot;)) %&gt;%
-  mutate_at(vars(county), str_to_title)</code></pre>
+  mutate_at(vars(county), str_to_title)
+
+age %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+median_age
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+38.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+39.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+34.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+39.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+42.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+43.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+42.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+41.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+44.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+40.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+48.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+36.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+48.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+42.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+40.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+48.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+40.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+44.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+42.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+46.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+56.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+44.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+32.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+35.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+42.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+41.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+42.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+39.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+40.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+41.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+38.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+43.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+40.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+39.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+43.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+37.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+43.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+40.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+42.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+44.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+39.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+40.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+40.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+35.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St Lawrence
+</td>
+<td style="text-align:right;">
+39.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+43.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+39.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+45.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+47.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+42.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+42.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+41.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+42.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+44.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+31.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+44.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+46.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+44.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+43.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+41.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+42.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+40.9
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This has 62 rows and 2 columns of data. In which, 2 variables
 are:<br />
 - <code>county</code>: NY county name<br />
 - <code>median_age</code>: median age of the population at each
 county</p>
 </div>
-<div id="sex" class="section level5">
-<h5>Sex</h5>
+<div id="sex" class="section level4">
+<h4>Sex</h4>
 <pre class="r"><code>sex &lt;- Sex_NY %&gt;% 
   janitor::clean_names() %&gt;% 
   filter (x1 == &quot;Male:&quot;) %&gt;%
@@ -596,19 +4694,1255 @@ county</p>
   separate(county, into = c(&quot;county&quot;, &quot;x&quot;), sep = &quot;_county_&quot;) %&gt;%
   select (county,percent_male ) %&gt;%
   mutate(county = str_replace (county, &quot;_&quot;, &quot; &quot;)) %&gt;%
-  mutate_at(vars(county), str_to_title)</code></pre>
+  mutate_at(vars(county), str_to_title)
+
+sex%&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_male
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+0.486
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+0.506
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+0.474
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+0.495
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+0.501
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+0.516
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+0.497
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+0.502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+0.517
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+0.493
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+0.507
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+0.487
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+0.522
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+0.546
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+0.501
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+0.527
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+0.506
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+0.526
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+0.476
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+0.508
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+0.496
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+0.485
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+0.496
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+0.491
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+0.476
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+0.490
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+0.502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+0.485
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+0.492
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+0.488
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+0.488
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+0.497
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+0.488
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+0.494
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St Lawrence
+</td>
+<td style="text-align:right;">
+0.513
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+0.496
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+0.490
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+0.527
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+0.502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+0.495
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+0.514
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+0.497
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+0.495
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+0.522
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+0.487
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+0.534
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+0.483
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This has 62 rows and 2 columns of data. In which, 2 variables
 are:<br />
 - <code>county</code>: NY county name<br />
 - <code>percent_male</code>: percentage of population who are identified
 as male</p>
 </div>
-<div id="low-birthweight-data" class="section level5">
-<h5>Low Birthweight Data</h5>
+<div id="low-birthweight-data" class="section level4">
+<h4>Low Birthweight Data</h4>
 <pre class="r"><code>lowbirthweight &lt;- lowbirthweight %&gt;% 
   janitor::clean_names()%&gt;%
   select (region_county, percentage)%&gt;%
-  rename (county = &quot;region_county&quot;, percent_lowbirthweight = &quot;percentage&quot;) </code></pre>
+  rename (county = &quot;region_county&quot;, percent_lowbirthweight = &quot;percentage&quot;) 
+
+lowbirthweight %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_lowbirthweight
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+10.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+5.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+8.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+8.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+9.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+5.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+8.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St. Lawrence
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+7.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+7.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+9.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+4.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This has 87 rows and 2 columns of data. In which, 2 variables
 are:<br />
 - <code>county</code>: NY county name<br />
@@ -617,8 +5951,8 @@ being identified as low birth weight (&lt;2,500g) (<a
 href="https://www.health.ny.gov/"
 class="uri">https://www.health.ny.gov/</a>)</p>
 </div>
-<div id="health-indicator-dataset" class="section level5">
-<h5>Health Indicator Dataset</h5>
+<div id="health-indicator-dataset" class="section level4">
+<h4>Health Indicator Dataset</h4>
 <p>The following dataset is obtained from New York State Department of
 Health (<a href="https://www.health.ny.gov/"
 class="uri">https://www.health.ny.gov/</a>) that contains 4 different
@@ -636,8 +5970,9 @@ will act as our outcomes of interest for our regression models.</p>
 cancer &lt;- health %&gt;% 
   filter (topic_area == &quot;Cancer Indicators&quot;) %&gt;% 
   filter (indicator_title == &quot;All cancer incidence rate per 100,000&quot;) %&gt;% 
-  select (-c(indicator_title, topic_area, measurement)) %&gt;% 
-  rename (cancer_mortality_per_100k = &quot;rate_percent&quot;)
+  select (-c(indicator_title, topic_area, measurement)) %&gt;%
+  mutate(rate_percent = as.numeric(rate_percent)/10) %&gt;%
+  rename (cancer_mortality_per_10k = &quot;rate_percent&quot;)
 
 resp &lt;- health %&gt;%
   filter (topic_area == &quot;Respiratory Disease Indicators&quot;) %&gt;%
@@ -655,9 +5990,1098 @@ maternal &lt;- health %&gt;%
   filter (topic_area == &quot;Maternal and Infant Health Indicators&quot;) %&gt;%
   filter (indicator_title == &quot;Percentage of premature births with &lt;37 weeks gestation&quot;) %&gt;% 
   select (-c(indicator_title, topic_area, measurement)) %&gt;% 
-  rename (premature_percentage = &quot;rate_percent&quot;)</code></pre>
+  rename (premature_percentage = &quot;rate_percent&quot;)
+health_merge &lt;- maternal %&gt;% 
+  inner_join(cancer, by = &quot;county&quot;) %&gt;%
+  inner_join(resp, by = &quot;county&quot;) %&gt;% 
+  inner_join(cardio, by = &quot;county&quot;) 
+
+health_merge %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+premature_percentage
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cancer_mortality_per_10k
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+asthma_hosp_rate_per_10k
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+cardio_hosp_rate_per_10k
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:left;">
+9.7
+</td>
+<td style="text-align:right;">
+65.59
+</td>
+<td style="text-align:left;">
+5.7
+</td>
+<td style="text-align:left;">
+148.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:left;">
+8.8
+</td>
+<td style="text-align:right;">
+66.18
+</td>
+<td style="text-align:left;">
+3.1
+</td>
+<td style="text-align:left;">
+151.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:left;">
+9.4
+</td>
+<td style="text-align:right;">
+69.59
+</td>
+<td style="text-align:left;">
+5.0
+</td>
+<td style="text-align:left;">
+171.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:left;">
+8.4
+</td>
+<td style="text-align:right;">
+68.99
+</td>
+<td style="text-align:left;">
+1.9
+</td>
+<td style="text-align:left;">
+159.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:left;">
+8.8
+</td>
+<td style="text-align:right;">
+72.01
+</td>
+<td style="text-align:left;">
+2.2
+</td>
+<td style="text-align:left;">
+169.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:left;">
+9.3
+</td>
+<td style="text-align:right;">
+73.68
+</td>
+<td style="text-align:left;">
+2.6
+</td>
+<td style="text-align:left;">
+90.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:left;">
+8.4
+</td>
+<td style="text-align:right;">
+72.31
+</td>
+<td style="text-align:left;">
+4.2
+</td>
+<td style="text-align:left;">
+161.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:left;">
+8.2
+</td>
+<td style="text-align:right;">
+73.57
+</td>
+<td style="text-align:left;">
+2.0
+</td>
+<td style="text-align:left;">
+177.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:left;">
+8.7
+</td>
+<td style="text-align:right;">
+68.46
+</td>
+<td style="text-align:left;">
+2.5
+</td>
+<td style="text-align:left;">
+147.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:left;">
+9.0
+</td>
+<td style="text-align:right;">
+82.23
+</td>
+<td style="text-align:left;">
+4.7
+</td>
+<td style="text-align:left;">
+168.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:left;">
+8.9
+</td>
+<td style="text-align:right;">
+68.34
+</td>
+<td style="text-align:left;">
+4.7
+</td>
+<td style="text-align:left;">
+158.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:left;">
+8.7
+</td>
+<td style="text-align:right;">
+75.42
+</td>
+<td style="text-align:left;">
+2.8
+</td>
+<td style="text-align:left;">
+181.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:left;">
+9.0
+</td>
+<td style="text-align:right;">
+62.68
+</td>
+<td style="text-align:left;">
+6.5
+</td>
+<td style="text-align:left;">
+141.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:left;">
+10.2
+</td>
+<td style="text-align:right;">
+71.48
+</td>
+<td style="text-align:left;">
+5.1
+</td>
+<td style="text-align:left;">
+159.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:left;">
+8.9
+</td>
+<td style="text-align:right;">
+72.62
+</td>
+<td style="text-align:left;">
+0.5*
+</td>
+<td style="text-align:left;">
+105.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:left;">
+8.5
+</td>
+<td style="text-align:right;">
+67.53
+</td>
+<td style="text-align:left;">
+1.9
+</td>
+<td style="text-align:left;">
+117.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:left;">
+9.0
+</td>
+<td style="text-align:right;">
+77.05
+</td>
+<td style="text-align:left;">
+1.7
+</td>
+<td style="text-align:left;">
+161.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:left;">
+9.3
+</td>
+<td style="text-align:right;">
+72.36
+</td>
+<td style="text-align:left;">
+2.6
+</td>
+<td style="text-align:left;">
+166.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:left;">
+8.8
+</td>
+<td style="text-align:right;">
+79.08
+</td>
+<td style="text-align:left;">
+4.8
+</td>
+<td style="text-align:left;">
+192.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:left;">
+s
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+0.0*
+</td>
+<td style="text-align:left;">
+175.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:left;">
+7.5
+</td>
+<td style="text-align:right;">
+70.15
+</td>
+<td style="text-align:left;">
+2.6
+</td>
+<td style="text-align:left;">
+178.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:left;">
+8.8
+</td>
+<td style="text-align:right;">
+59.69
+</td>
+<td style="text-align:left;">
+3.8
+</td>
+<td style="text-align:left;">
+142.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:left;">
+7.0
+</td>
+<td style="text-align:right;">
+65.46
+</td>
+<td style="text-align:left;">
+3.0
+</td>
+<td style="text-align:left;">
+154.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:left;">
+7.8
+</td>
+<td style="text-align:right;">
+68.43
+</td>
+<td style="text-align:left;">
+2.2
+</td>
+<td style="text-align:left;">
+127.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:left;">
+9.7
+</td>
+<td style="text-align:right;">
+62.76
+</td>
+<td style="text-align:left;">
+1.8
+</td>
+<td style="text-align:left;">
+122.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:left;">
+10.0
+</td>
+<td style="text-align:right;">
+65.74
+</td>
+<td style="text-align:left;">
+7.4
+</td>
+<td style="text-align:left;">
+152.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:left;">
+9.0
+</td>
+<td style="text-align:right;">
+76.86
+</td>
+<td style="text-align:left;">
+3.0
+</td>
+<td style="text-align:left;">
+200.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:left;">
+9.2
+</td>
+<td style="text-align:right;">
+67.06
+</td>
+<td style="text-align:left;">
+7.1
+</td>
+<td style="text-align:left;">
+169.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:left;">
+10.0
+</td>
+<td style="text-align:right;">
+78.86
+</td>
+<td style="text-align:left;">
+3.8
+</td>
+<td style="text-align:left;">
+182.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:left;">
+9.8
+</td>
+<td style="text-align:right;">
+69.56
+</td>
+<td style="text-align:left;">
+3.7
+</td>
+<td style="text-align:left;">
+176.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:left;">
+9.2
+</td>
+<td style="text-align:right;">
+66.68
+</td>
+<td style="text-align:left;">
+5.2
+</td>
+<td style="text-align:left;">
+145.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+9.1
+</td>
+<td style="text-align:right;">
+76.79
+</td>
+<td style="text-align:left;">
+2.2
+</td>
+<td style="text-align:left;">
+147.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:left;">
+8.3
+</td>
+<td style="text-align:right;">
+53.48
+</td>
+<td style="text-align:left;">
+6.7
+</td>
+<td style="text-align:left;">
+141.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:left;">
+9.6
+</td>
+<td style="text-align:right;">
+76.96
+</td>
+<td style="text-align:left;">
+1.6
+</td>
+<td style="text-align:left;">
+158.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:left;">
+7.9
+</td>
+<td style="text-align:right;">
+69.43
+</td>
+<td style="text-align:left;">
+3.3
+</td>
+<td style="text-align:left;">
+161.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:left;">
+7.5
+</td>
+<td style="text-align:right;">
+68.94
+</td>
+<td style="text-align:left;">
+2.5
+</td>
+<td style="text-align:left;">
+178.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:left;">
+8.7
+</td>
+<td style="text-align:right;">
+64.47
+</td>
+<td style="text-align:left;">
+4.6
+</td>
+<td style="text-align:left;">
+114.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:left;">
+10.2
+</td>
+<td style="text-align:right;">
+66.05
+</td>
+<td style="text-align:left;">
+3.5
+</td>
+<td style="text-align:left;">
+148.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:left;">
+6.3
+</td>
+<td style="text-align:right;">
+54.49
+</td>
+<td style="text-align:left;">
+4.5
+</td>
+<td style="text-align:left;">
+104.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St. Lawrence
+</td>
+<td style="text-align:left;">
+8.7
+</td>
+<td style="text-align:right;">
+62.57
+</td>
+<td style="text-align:left;">
+3.2
+</td>
+<td style="text-align:left;">
+157.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:left;">
+8.1
+</td>
+<td style="text-align:right;">
+68.64
+</td>
+<td style="text-align:left;">
+2.6
+</td>
+<td style="text-align:left;">
+130.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:left;">
+10.3
+</td>
+<td style="text-align:right;">
+64.28
+</td>
+<td style="text-align:left;">
+5.0
+</td>
+<td style="text-align:left;">
+153.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:left;">
+8.5
+</td>
+<td style="text-align:right;">
+69.63
+</td>
+<td style="text-align:left;">
+2.5
+</td>
+<td style="text-align:left;">
+142.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:left;">
+5.2
+</td>
+<td style="text-align:right;">
+77.66
+</td>
+<td style="text-align:left;">
+1.5*
+</td>
+<td style="text-align:left;">
+138.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:left;">
+8.4
+</td>
+<td style="text-align:right;">
+70.07
+</td>
+<td style="text-align:left;">
+1.7
+</td>
+<td style="text-align:left;">
+142.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:left;">
+8.0
+</td>
+<td style="text-align:right;">
+69.41
+</td>
+<td style="text-align:left;">
+2.7
+</td>
+<td style="text-align:left;">
+135.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:left;">
+10.0
+</td>
+<td style="text-align:right;">
+68.67
+</td>
+<td style="text-align:left;">
+5.1
+</td>
+<td style="text-align:left;">
+173.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:left;">
+10.3
+</td>
+<td style="text-align:right;">
+61.70
+</td>
+<td style="text-align:left;">
+5.8
+</td>
+<td style="text-align:left;">
+181.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:left;">
+8.6
+</td>
+<td style="text-align:right;">
+76.21
+</td>
+<td style="text-align:left;">
+2.1
+</td>
+<td style="text-align:left;">
+84.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:left;">
+6.5
+</td>
+<td style="text-align:right;">
+49.56
+</td>
+<td style="text-align:left;">
+1.7
+</td>
+<td style="text-align:left;">
+80.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:left;">
+9.0
+</td>
+<td style="text-align:right;">
+66.57
+</td>
+<td style="text-align:left;">
+5.1
+</td>
+<td style="text-align:left;">
+162.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:left;">
+10.2
+</td>
+<td style="text-align:right;">
+80.66
+</td>
+<td style="text-align:left;">
+4.3
+</td>
+<td style="text-align:left;">
+173.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:left;">
+11.1
+</td>
+<td style="text-align:right;">
+75.01
+</td>
+<td style="text-align:left;">
+3.8
+</td>
+<td style="text-align:left;">
+161.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:left;">
+8.8
+</td>
+<td style="text-align:right;">
+72.46
+</td>
+<td style="text-align:left;">
+4.3
+</td>
+<td style="text-align:left;">
+191.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:left;">
+9.1
+</td>
+<td style="text-align:right;">
+60.86
+</td>
+<td style="text-align:left;">
+7.1
+</td>
+<td style="text-align:left;">
+136.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:left;">
+10.3
+</td>
+<td style="text-align:right;">
+75.61
+</td>
+<td style="text-align:left;">
+3.5
+</td>
+<td style="text-align:left;">
+155.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:left;">
+6.0
+</td>
+<td style="text-align:right;">
+73.05
+</td>
+<td style="text-align:left;">
+2.0
+</td>
+<td style="text-align:left;">
+130.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:left;">
+10.3
+</td>
+<td style="text-align:right;">
+45.87
+</td>
+<td style="text-align:left;">
+28.4
+</td>
+<td style="text-align:left;">
+172.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:left;">
+8.5
+</td>
+<td style="text-align:right;">
+47.96
+</td>
+<td style="text-align:left;">
+10.7
+</td>
+<td style="text-align:left;">
+132.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:left;">
+8.7
+</td>
+<td style="text-align:right;">
+53.95
+</td>
+<td style="text-align:left;">
+8.4
+</td>
+<td style="text-align:left;">
+117.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:left;">
+9.1
+</td>
+<td style="text-align:right;">
+51.60
+</td>
+<td style="text-align:left;">
+7.8
+</td>
+<td style="text-align:left;">
+141.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:left;">
+9.2
+</td>
+<td style="text-align:right;">
+65.15
+</td>
+<td style="text-align:left;">
+7.9
+</td>
+<td style="text-align:left;">
+160.8
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>They are:<br />
-- <code>cancer_mortality_per_100k</code>: percentage of cancer mortality
+- <code>cancer_mortality_per_10k</code>: percentage of cancer mortality
 per 100 thousands people in each NY county (Cancer Indicator)<br />
 - <code>asthma_hosp_rate_per_10k</code>: percentage of asthma
 hospitalization per 10 thousands people in each NY county (Respiratory
@@ -668,19 +7092,15 @@ in each NY county (Cardiovascular Disease Indicator)<br />
 - <code>premature_percentage</code>: percentage of children being born
 prematurely (&lt;37 gestational weeks) in each NY county</p>
 </div>
-<div id="merge-dataset" class="section level5">
-<h5>Merge dataset:</h5>
-<p>Here we perform <code>inner_join()</code> to create 2 bigger datasets
-<code>health_merge</code> and <code>demographic_merge</code>. Then, we
-join them with our <code>lowbirthweight</code> &amp; <code>pm2_5</code>
-tp make a finalized data frame called <code>merge</code>. And, we will
-use this for regression model.</p>
-<pre class="r"><code>health_merge &lt;- maternal %&gt;% 
-  inner_join(cancer, by = &quot;county&quot;) %&gt;%
-  inner_join(resp, by = &quot;county&quot;) %&gt;% 
-  inner_join(cardio, by = &quot;county&quot;) 
-
-demographic_merge &lt;- age %&gt;%
+</div>
+<div id="merge-dataset" class="section level3">
+<h3>Merge dataset</h3>
+<p>Here we perform <code>inner_join()</code> to create 1 bigger dataset
+called <code>demographic_merge</code>. Then, we join them with our
+<code>lowbirthweight</code> &amp; <code>pm2_5</code> to make a finalized
+data frame called <code>merge</code>. And, we will use this for
+regression model.</p>
+<pre class="r"><code>demographic_merge &lt;- age %&gt;%
   inner_join(sex,  by = &quot;county&quot;) %&gt;%
   inner_join(income, by = &quot;county&quot;) %&gt;% 
   inner_join(race_merge, by = &quot;county&quot;) %&gt;% 
@@ -698,24 +7118,3178 @@ merge &lt;- merge %&gt;%
   mutate(asthma_hosp_rate_per_10k = as.numeric(asthma_hosp_rate_per_10k))%&gt;%
   mutate(cardio_hosp_rate_per_10k = as.numeric(cardio_hosp_rate_per_10k)) %&gt;%
   mutate(premature_percentage = as.numeric(premature_percentage))%&gt;%
-  mutate(cancer_mortality_per_100k = as.numeric(cancer_mortality_per_100k))</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `asthma_hosp_rate_per_10k =
-##   as.numeric(asthma_hosp_rate_per_10k)`.
-## Caused by warning:
-## ! NAs introduced by coercion</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `premature_percentage = as.numeric(premature_percentage)`.
-## Caused by warning:
-## ! NAs introduced by coercion</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `cancer_mortality_per_100k =
-##   as.numeric(cancer_mortality_per_100k)`.
-## Caused by warning:
-## ! NAs introduced by coercion</code></pre>
+  mutate(cancer_mortality_per_10k = as.numeric(cancer_mortality_per_10k))
+
+merge %&gt;% 
+  knitr::kable(digits = 3) %&gt;% 
+  kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) %&gt;% 
+  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+annual_pm2.5
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_lowbirthweight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+premature_percentage
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cancer_mortality_per_10k
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+asthma_hosp_rate_per_10k
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cardio_hosp_rate_per_10k
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+median_age
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_male
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_high_income
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_non_hisp_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_non_hisp_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_hisp_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_hisp_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_other
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percentage_high_education
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Nassau
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+9.2
+</td>
+<td style="text-align:right;">
+67.06
+</td>
+<td style="text-align:right;">
+7.1
+</td>
+<td style="text-align:right;">
+169.5
+</td>
+<td style="text-align:right;">
+41.8
+</td>
+<td style="text-align:right;">
+0.491
+</td>
+<td style="text-align:right;">
+0.712
+</td>
+<td style="text-align:right;">
+0.583
+</td>
+<td style="text-align:right;">
+0.110
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+<td style="text-align:right;">
+0.475
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suffolk
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:right;">
+68.67
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+<td style="text-align:right;">
+173.8
+</td>
+<td style="text-align:right;">
+41.7
+</td>
+<td style="text-align:right;">
+0.495
+</td>
+<td style="text-align:right;">
+0.669
+</td>
+<td style="text-align:right;">
+0.664
+</td>
+<td style="text-align:right;">
+0.069
+</td>
+<td style="text-align:right;">
+0.098
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.162
+</td>
+<td style="text-align:right;">
+0.383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+<td style="text-align:right;">
+10.2
+</td>
+<td style="text-align:right;">
+10.3
+</td>
+<td style="text-align:right;">
+45.87
+</td>
+<td style="text-align:right;">
+28.4
+</td>
+<td style="text-align:right;">
+172.5
+</td>
+<td style="text-align:right;">
+34.8
+</td>
+<td style="text-align:right;">
+0.474
+</td>
+<td style="text-align:right;">
+0.296
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+0.285
+</td>
+<td style="text-align:right;">
+0.109
+</td>
+<td style="text-align:right;">
+0.060
+</td>
+<td style="text-align:right;">
+0.456
+</td>
+<td style="text-align:right;">
+0.209
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kings
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+8.5
+</td>
+<td style="text-align:right;">
+47.96
+</td>
+<td style="text-align:right;">
+10.7
+</td>
+<td style="text-align:right;">
+132.1
+</td>
+<td style="text-align:right;">
+35.7
+</td>
+<td style="text-align:right;">
+0.476
+</td>
+<td style="text-align:right;">
+0.466
+</td>
+<td style="text-align:right;">
+0.367
+</td>
+<td style="text-align:right;">
+0.286
+</td>
+<td style="text-align:right;">
+0.054
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.274
+</td>
+<td style="text-align:right;">
+0.395
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+53.95
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+<td style="text-align:right;">
+117.3
+</td>
+<td style="text-align:right;">
+38.1
+</td>
+<td style="text-align:right;">
+0.476
+</td>
+<td style="text-align:right;">
+0.572
+</td>
+<td style="text-align:right;">
+0.467
+</td>
+<td style="text-align:right;">
+0.121
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.324
+</td>
+<td style="text-align:right;">
+0.626
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Queens
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+9.1
+</td>
+<td style="text-align:right;">
+51.60
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+141.7
+</td>
+<td style="text-align:right;">
+39.6
+</td>
+<td style="text-align:right;">
+0.488
+</td>
+<td style="text-align:right;">
+0.505
+</td>
+<td style="text-align:right;">
+0.246
+</td>
+<td style="text-align:right;">
+0.168
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.486
+</td>
+<td style="text-align:right;">
+0.339
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Richmond
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+9.2
+</td>
+<td style="text-align:right;">
+65.15
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+160.8
+</td>
+<td style="text-align:right;">
+40.4
+</td>
+<td style="text-align:right;">
+0.488
+</td>
+<td style="text-align:right;">
+0.567
+</td>
+<td style="text-align:right;">
+0.596
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+<td style="text-align:right;">
+0.097
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.206
+</td>
+<td style="text-align:right;">
+0.349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dutchess
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+62.68
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+141.6
+</td>
+<td style="text-align:right;">
+42.5
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+<td style="text-align:right;">
+0.561
+</td>
+<td style="text-align:right;">
+0.699
+</td>
+<td style="text-align:right;">
+0.099
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.141
+</td>
+<td style="text-align:right;">
+0.377
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+<td style="text-align:right;">
+53.48
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+141.8
+</td>
+<td style="text-align:right;">
+37.0
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+<td style="text-align:right;">
+0.558
+</td>
+<td style="text-align:right;">
+0.622
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+0.085
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.183
+</td>
+<td style="text-align:right;">
+0.314
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Putnam
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+64.47
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+114.9
+</td>
+<td style="text-align:right;">
+44.2
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+<td style="text-align:right;">
+0.672
+</td>
+<td style="text-align:right;">
+0.764
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.133
+</td>
+<td style="text-align:right;">
+0.415
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rockland
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+5.6
+</td>
+<td style="text-align:right;">
+6.3
+</td>
+<td style="text-align:right;">
+54.49
+</td>
+<td style="text-align:right;">
+4.5
+</td>
+<td style="text-align:right;">
+104.4
+</td>
+<td style="text-align:right;">
+35.6
+</td>
+<td style="text-align:right;">
+0.494
+</td>
+<td style="text-align:right;">
+0.612
+</td>
+<td style="text-align:right;">
+0.629
+</td>
+<td style="text-align:right;">
+0.108
+</td>
+<td style="text-align:right;">
+0.065
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+0.420
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sullivan
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+8.6
+</td>
+<td style="text-align:right;">
+10.3
+</td>
+<td style="text-align:right;">
+61.70
+</td>
+<td style="text-align:right;">
+5.8
+</td>
+<td style="text-align:right;">
+181.8
+</td>
+<td style="text-align:right;">
+42.3
+</td>
+<td style="text-align:right;">
+0.514
+</td>
+<td style="text-align:right;">
+0.418
+</td>
+<td style="text-align:right;">
+0.702
+</td>
+<td style="text-align:right;">
+0.080
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.147
+</td>
+<td style="text-align:right;">
+0.270
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ulster
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+66.57
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+<td style="text-align:right;">
+162.6
+</td>
+<td style="text-align:right;">
+44.2
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+<td style="text-align:right;">
+0.476
+</td>
+<td style="text-align:right;">
+0.760
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.139
+</td>
+<td style="text-align:right;">
+0.345
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Westchester
+</td>
+<td style="text-align:right;">
+9.3
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+9.1
+</td>
+<td style="text-align:right;">
+60.86
+</td>
+<td style="text-align:right;">
+7.1
+</td>
+<td style="text-align:right;">
+136.8
+</td>
+<td style="text-align:right;">
+41.2
+</td>
+<td style="text-align:right;">
+0.487
+</td>
+<td style="text-align:right;">
+0.624
+</td>
+<td style="text-align:right;">
+0.524
+</td>
+<td style="text-align:right;">
+0.133
+</td>
+<td style="text-align:right;">
+0.075
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.255
+</td>
+<td style="text-align:right;">
+0.506
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Albany
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+<td style="text-align:right;">
+9.7
+</td>
+<td style="text-align:right;">
+65.59
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+<td style="text-align:right;">
+148.9
+</td>
+<td style="text-align:right;">
+38.0
+</td>
+<td style="text-align:right;">
+0.486
+</td>
+<td style="text-align:right;">
+0.494
+</td>
+<td style="text-align:right;">
+0.710
+</td>
+<td style="text-align:right;">
+0.114
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.142
+</td>
+<td style="text-align:right;">
+0.443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Columbia
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+82.23
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+168.6
+</td>
+<td style="text-align:right;">
+48.9
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+<td style="text-align:right;">
+0.489
+</td>
+<td style="text-align:right;">
+0.848
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.089
+</td>
+<td style="text-align:right;">
+0.349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Greene
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+79.08
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+<td style="text-align:right;">
+192.3
+</td>
+<td style="text-align:right;">
+46.6
+</td>
+<td style="text-align:right;">
+0.527
+</td>
+<td style="text-align:right;">
+0.419
+</td>
+<td style="text-align:right;">
+0.838
+</td>
+<td style="text-align:right;">
+0.053
+</td>
+<td style="text-align:right;">
+0.035
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.070
+</td>
+<td style="text-align:right;">
+0.256
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rensselaer
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+<td style="text-align:right;">
+8.6
+</td>
+<td style="text-align:right;">
+10.2
+</td>
+<td style="text-align:right;">
+66.05
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+148.5
+</td>
+<td style="text-align:right;">
+40.1
+</td>
+<td style="text-align:right;">
+0.497
+</td>
+<td style="text-align:right;">
+0.514
+</td>
+<td style="text-align:right;">
+0.820
+</td>
+<td style="text-align:right;">
+0.061
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.094
+</td>
+<td style="text-align:right;">
+0.343
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saratoga
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+8.1
+</td>
+<td style="text-align:right;">
+68.64
+</td>
+<td style="text-align:right;">
+2.6
+</td>
+<td style="text-align:right;">
+130.9
+</td>
+<td style="text-align:right;">
+43.2
+</td>
+<td style="text-align:right;">
+0.496
+</td>
+<td style="text-align:right;">
+0.591
+</td>
+<td style="text-align:right;">
+0.894
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.069
+</td>
+<td style="text-align:right;">
+0.427
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schenectady
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+<td style="text-align:right;">
+9.2
+</td>
+<td style="text-align:right;">
+10.3
+</td>
+<td style="text-align:right;">
+64.28
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+<td style="text-align:right;">
+153.4
+</td>
+<td style="text-align:right;">
+39.9
+</td>
+<td style="text-align:right;">
+0.490
+</td>
+<td style="text-align:right;">
+0.472
+</td>
+<td style="text-align:right;">
+0.716
+</td>
+<td style="text-align:right;">
+0.094
+</td>
+<td style="text-align:right;">
+0.024
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.162
+</td>
+<td style="text-align:right;">
+0.333
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fulton
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+77.05
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+<td style="text-align:right;">
+161.5
+</td>
+<td style="text-align:right;">
+44.3
+</td>
+<td style="text-align:right;">
+0.501
+</td>
+<td style="text-align:right;">
+0.364
+</td>
+<td style="text-align:right;">
+0.906
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+<td style="text-align:right;">
+0.182
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herkimer
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+<td style="text-align:right;">
+70.15
+</td>
+<td style="text-align:right;">
+2.6
+</td>
+<td style="text-align:right;">
+178.2
+</td>
+<td style="text-align:right;">
+44.3
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+<td style="text-align:right;">
+0.410
+</td>
+<td style="text-align:right;">
+0.932
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.045
+</td>
+<td style="text-align:right;">
+0.214
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montgomery
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+76.86
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+200.1
+</td>
+<td style="text-align:right;">
+40.5
+</td>
+<td style="text-align:right;">
+0.496
+</td>
+<td style="text-align:right;">
+0.345
+</td>
+<td style="text-align:right;">
+0.794
+</td>
+<td style="text-align:right;">
+0.026
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.120
+</td>
+<td style="text-align:right;">
+0.192
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Otsego
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+<td style="text-align:right;">
+5.6
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+<td style="text-align:right;">
+68.94
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+178.7
+</td>
+<td style="text-align:right;">
+42.2
+</td>
+<td style="text-align:right;">
+0.488
+</td>
+<td style="text-align:right;">
+0.400
+</td>
+<td style="text-align:right;">
+0.904
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+<td style="text-align:right;">
+0.333
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schoharie
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+<td style="text-align:right;">
+8.5
+</td>
+<td style="text-align:right;">
+69.63
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+142.6
+</td>
+<td style="text-align:right;">
+45.7
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+<td style="text-align:right;">
+0.423
+</td>
+<td style="text-align:right;">
+0.910
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.059
+</td>
+<td style="text-align:right;">
+0.232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Clinton
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+8.1
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+68.46
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+147.1
+</td>
+<td style="text-align:right;">
+40.7
+</td>
+<td style="text-align:right;">
+0.517
+</td>
+<td style="text-align:right;">
+0.408
+</td>
+<td style="text-align:right;">
+0.897
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Essex
+</td>
+<td style="text-align:right;">
+3.4
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+8.9
+</td>
+<td style="text-align:right;">
+72.62
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+105.8
+</td>
+<td style="text-align:right;">
+48.3
+</td>
+<td style="text-align:right;">
+0.522
+</td>
+<td style="text-align:right;">
+0.408
+</td>
+<td style="text-align:right;">
+0.912
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+<td style="text-align:right;">
+0.305
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Franklin
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+8.5
+</td>
+<td style="text-align:right;">
+67.53
+</td>
+<td style="text-align:right;">
+1.9
+</td>
+<td style="text-align:right;">
+117.5
+</td>
+<td style="text-align:right;">
+40.6
+</td>
+<td style="text-align:right;">
+0.546
+</td>
+<td style="text-align:right;">
+0.358
+</td>
+<td style="text-align:right;">
+0.811
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.129
+</td>
+<td style="text-align:right;">
+0.216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamilton
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+175.2
+</td>
+<td style="text-align:right;">
+56.4
+</td>
+<td style="text-align:right;">
+0.506
+</td>
+<td style="text-align:right;">
+0.432
+</td>
+<td style="text-align:right;">
+0.921
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+<td style="text-align:right;">
+0.205
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Warren
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+<td style="text-align:right;">
+10.2
+</td>
+<td style="text-align:right;">
+80.66
+</td>
+<td style="text-align:right;">
+4.3
+</td>
+<td style="text-align:right;">
+173.6
+</td>
+<td style="text-align:right;">
+46.8
+</td>
+<td style="text-align:right;">
+0.495
+</td>
+<td style="text-align:right;">
+0.466
+</td>
+<td style="text-align:right;">
+0.930
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.043
+</td>
+<td style="text-align:right;">
+0.331
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+<td style="text-align:right;">
+11.1
+</td>
+<td style="text-align:right;">
+75.01
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+<td style="text-align:right;">
+161.6
+</td>
+<td style="text-align:right;">
+44.4
+</td>
+<td style="text-align:right;">
+0.522
+</td>
+<td style="text-align:right;">
+0.416
+</td>
+<td style="text-align:right;">
+0.911
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+<td style="text-align:right;">
+0.206
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jefferson
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+59.69
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+<td style="text-align:right;">
+142.9
+</td>
+<td style="text-align:right;">
+32.9
+</td>
+<td style="text-align:right;">
+0.526
+</td>
+<td style="text-align:right;">
+0.377
+</td>
+<td style="text-align:right;">
+0.809
+</td>
+<td style="text-align:right;">
+0.055
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.093
+</td>
+<td style="text-align:right;">
+0.243
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lewis
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+65.46
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+154.7
+</td>
+<td style="text-align:right;">
+42.0
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+<td style="text-align:right;">
+0.390
+</td>
+<td style="text-align:right;">
+0.946
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.032
+</td>
+<td style="text-align:right;">
+0.188
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St. Lawrence
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+62.57
+</td>
+<td style="text-align:right;">
+3.2
+</td>
+<td style="text-align:right;">
+157.0
+</td>
+<td style="text-align:right;">
+39.0
+</td>
+<td style="text-align:right;">
+0.513
+</td>
+<td style="text-align:right;">
+0.356
+</td>
+<td style="text-align:right;">
+0.917
+</td>
+<td style="text-align:right;">
+0.025
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cayuga
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+72.01
+</td>
+<td style="text-align:right;">
+2.2
+</td>
+<td style="text-align:right;">
+169.5
+</td>
+<td style="text-align:right;">
+43.3
+</td>
+<td style="text-align:right;">
+0.516
+</td>
+<td style="text-align:right;">
+0.397
+</td>
+<td style="text-align:right;">
+0.888
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.059
+</td>
+<td style="text-align:right;">
+0.222
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cortland
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+<td style="text-align:right;">
+7.5
+</td>
+<td style="text-align:right;">
+8.9
+</td>
+<td style="text-align:right;">
+68.34
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+158.7
+</td>
+<td style="text-align:right;">
+36.5
+</td>
+<td style="text-align:right;">
+0.493
+</td>
+<td style="text-align:right;">
+0.404
+</td>
+<td style="text-align:right;">
+0.914
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+<td style="text-align:right;">
+0.281
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Madison
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+<td style="text-align:right;">
+9.7
+</td>
+<td style="text-align:right;">
+62.76
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+122.3
+</td>
+<td style="text-align:right;">
+42.5
+</td>
+<td style="text-align:right;">
+0.496
+</td>
+<td style="text-align:right;">
+0.417
+</td>
+<td style="text-align:right;">
+0.917
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oneida
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+9.8
+</td>
+<td style="text-align:right;">
+69.56
+</td>
+<td style="text-align:right;">
+3.7
+</td>
+<td style="text-align:right;">
+176.6
+</td>
+<td style="text-align:right;">
+40.8
+</td>
+<td style="text-align:right;">
+0.502
+</td>
+<td style="text-align:right;">
+0.409
+</td>
+<td style="text-align:right;">
+0.811
+</td>
+<td style="text-align:right;">
+0.057
+</td>
+<td style="text-align:right;">
+0.027
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.101
+</td>
+<td style="text-align:right;">
+0.262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Onondaga
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+<td style="text-align:right;">
+9.2
+</td>
+<td style="text-align:right;">
+66.68
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+145.8
+</td>
+<td style="text-align:right;">
+39.3
+</td>
+<td style="text-align:right;">
+0.485
+</td>
+<td style="text-align:right;">
+0.443
+</td>
+<td style="text-align:right;">
+0.760
+</td>
+<td style="text-align:right;">
+0.103
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.110
+</td>
+<td style="text-align:right;">
+0.365
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oswego
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+69.43
+</td>
+<td style="text-align:right;">
+3.3
+</td>
+<td style="text-align:right;">
+161.8
+</td>
+<td style="text-align:right;">
+40.7
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+<td style="text-align:right;">
+0.416
+</td>
+<td style="text-align:right;">
+0.928
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.208
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Broome
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+9.4
+</td>
+<td style="text-align:right;">
+69.59
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+<td style="text-align:right;">
+171.8
+</td>
+<td style="text-align:right;">
+39.7
+</td>
+<td style="text-align:right;">
+0.495
+</td>
+<td style="text-align:right;">
+0.362
+</td>
+<td style="text-align:right;">
+0.824
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.105
+</td>
+<td style="text-align:right;">
+0.289
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chenango
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+7.6
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+<td style="text-align:right;">
+73.57
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+177.5
+</td>
+<td style="text-align:right;">
+44.7
+</td>
+<td style="text-align:right;">
+0.502
+</td>
+<td style="text-align:right;">
+0.364
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+<td style="text-align:right;">
+0.183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+75.42
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+<td style="text-align:right;">
+181.5
+</td>
+<td style="text-align:right;">
+48.5
+</td>
+<td style="text-align:right;">
+0.507
+</td>
+<td style="text-align:right;">
+0.334
+</td>
+<td style="text-align:right;">
+0.912
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+<td style="text-align:right;">
+0.230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tioga
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+<td style="text-align:right;">
+7.1
+</td>
+<td style="text-align:right;">
+8.6
+</td>
+<td style="text-align:right;">
+76.21
+</td>
+<td style="text-align:right;">
+2.1
+</td>
+<td style="text-align:right;">
+84.3
+</td>
+<td style="text-align:right;">
+44.5
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+<td style="text-align:right;">
+0.428
+</td>
+<td style="text-align:right;">
+0.943
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.037
+</td>
+<td style="text-align:right;">
+0.258
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tompkins
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+49.56
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+<td style="text-align:right;">
+80.4
+</td>
+<td style="text-align:right;">
+31.8
+</td>
+<td style="text-align:right;">
+0.497
+</td>
+<td style="text-align:right;">
+0.427
+</td>
+<td style="text-align:right;">
+0.769
+</td>
+<td style="text-align:right;">
+0.035
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.168
+</td>
+<td style="text-align:right;">
+0.553
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chemung
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+<td style="text-align:right;">
+72.31
+</td>
+<td style="text-align:right;">
+4.2
+</td>
+<td style="text-align:right;">
+161.9
+</td>
+<td style="text-align:right;">
+41.4
+</td>
+<td style="text-align:right;">
+0.499
+</td>
+<td style="text-align:right;">
+0.377
+</td>
+<td style="text-align:right;">
+0.853
+</td>
+<td style="text-align:right;">
+0.058
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.072
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Livingston
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+68.43
+</td>
+<td style="text-align:right;">
+2.2
+</td>
+<td style="text-align:right;">
+127.8
+</td>
+<td style="text-align:right;">
+41.7
+</td>
+<td style="text-align:right;">
+0.508
+</td>
+<td style="text-align:right;">
+0.428
+</td>
+<td style="text-align:right;">
+0.895
+</td>
+<td style="text-align:right;">
+0.026
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.060
+</td>
+<td style="text-align:right;">
+0.289
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monroe
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+<td style="text-align:right;">
+9.1
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:right;">
+65.74
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+<td style="text-align:right;">
+152.4
+</td>
+<td style="text-align:right;">
+39.2
+</td>
+<td style="text-align:right;">
+0.485
+</td>
+<td style="text-align:right;">
+0.444
+</td>
+<td style="text-align:right;">
+0.698
+</td>
+<td style="text-align:right;">
+0.140
+</td>
+<td style="text-align:right;">
+0.041
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.113
+</td>
+<td style="text-align:right;">
+0.400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+9.1
+</td>
+<td style="text-align:right;">
+76.79
+</td>
+<td style="text-align:right;">
+2.2
+</td>
+<td style="text-align:right;">
+147.1
+</td>
+<td style="text-align:right;">
+43.6
+</td>
+<td style="text-align:right;">
+0.492
+</td>
+<td style="text-align:right;">
+0.474
+</td>
+<td style="text-align:right;">
+0.891
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.064
+</td>
+<td style="text-align:right;">
+0.375
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Schuyler
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+77.66
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+138.4
+</td>
+<td style="text-align:right;">
+47.1
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+<td style="text-align:right;">
+0.411
+</td>
+<td style="text-align:right;">
+0.944
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+<td style="text-align:right;">
+0.243
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Seneca
+</td>
+<td style="text-align:right;">
+6.4
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+<td style="text-align:right;">
+70.07
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+<td style="text-align:right;">
+142.1
+</td>
+<td style="text-align:right;">
+42.5
+</td>
+<td style="text-align:right;">
+0.527
+</td>
+<td style="text-align:right;">
+0.373
+</td>
+<td style="text-align:right;">
+0.879
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.051
+</td>
+<td style="text-align:right;">
+0.215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steuben
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+69.41
+</td>
+<td style="text-align:right;">
+2.7
+</td>
+<td style="text-align:right;">
+135.1
+</td>
+<td style="text-align:right;">
+42.9
+</td>
+<td style="text-align:right;">
+0.502
+</td>
+<td style="text-align:right;">
+0.384
+</td>
+<td style="text-align:right;">
+0.929
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+<td style="text-align:right;">
+0.255
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+72.46
+</td>
+<td style="text-align:right;">
+4.3
+</td>
+<td style="text-align:right;">
+191.0
+</td>
+<td style="text-align:right;">
+43.9
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+<td style="text-align:right;">
+0.424
+</td>
+<td style="text-align:right;">
+0.889
+</td>
+<td style="text-align:right;">
+0.021
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.071
+</td>
+<td style="text-align:right;">
+0.244
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yates
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+<td style="text-align:right;">
+4.0
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+<td style="text-align:right;">
+73.05
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+130.7
+</td>
+<td style="text-align:right;">
+40.9
+</td>
+<td style="text-align:right;">
+0.483
+</td>
+<td style="text-align:right;">
+0.372
+</td>
+<td style="text-align:right;">
+0.948
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.245
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allegany
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+66.18
+</td>
+<td style="text-align:right;">
+3.1
+</td>
+<td style="text-align:right;">
+151.8
+</td>
+<td style="text-align:right;">
+39.2
+</td>
+<td style="text-align:right;">
+0.506
+</td>
+<td style="text-align:right;">
+0.342
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.031
+</td>
+<td style="text-align:right;">
+0.224
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cattaraugus
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+<td style="text-align:right;">
+68.99
+</td>
+<td style="text-align:right;">
+1.9
+</td>
+<td style="text-align:right;">
+159.0
+</td>
+<td style="text-align:right;">
+42.3
+</td>
+<td style="text-align:right;">
+0.501
+</td>
+<td style="text-align:right;">
+0.335
+</td>
+<td style="text-align:right;">
+0.897
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.076
+</td>
+<td style="text-align:right;">
+0.200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chautauqua
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+<td style="text-align:right;">
+9.3
+</td>
+<td style="text-align:right;">
+73.68
+</td>
+<td style="text-align:right;">
+2.6
+</td>
+<td style="text-align:right;">
+90.2
+</td>
+<td style="text-align:right;">
+42.8
+</td>
+<td style="text-align:right;">
+0.497
+</td>
+<td style="text-align:right;">
+0.323
+</td>
+<td style="text-align:right;">
+0.865
+</td>
+<td style="text-align:right;">
+0.023
+</td>
+<td style="text-align:right;">
+0.033
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.074
+</td>
+<td style="text-align:right;">
+0.233
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Erie
+</td>
+<td style="text-align:right;">
+7.6
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+10.2
+</td>
+<td style="text-align:right;">
+71.48
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+<td style="text-align:right;">
+159.5
+</td>
+<td style="text-align:right;">
+40.2
+</td>
+<td style="text-align:right;">
+0.487
+</td>
+<td style="text-align:right;">
+0.419
+</td>
+<td style="text-align:right;">
+0.746
+</td>
+<td style="text-align:right;">
+0.124
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.107
+</td>
+<td style="text-align:right;">
+0.359
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genesee
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+<td style="text-align:right;">
+9.3
+</td>
+<td style="text-align:right;">
+72.36
+</td>
+<td style="text-align:right;">
+2.6
+</td>
+<td style="text-align:right;">
+166.9
+</td>
+<td style="text-align:right;">
+42.6
+</td>
+<td style="text-align:right;">
+0.504
+</td>
+<td style="text-align:right;">
+0.419
+</td>
+<td style="text-align:right;">
+0.900
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niagara
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:right;">
+78.86
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+<td style="text-align:right;">
+182.8
+</td>
+<td style="text-align:right;">
+43.3
+</td>
+<td style="text-align:right;">
+0.490
+</td>
+<td style="text-align:right;">
+0.404
+</td>
+<td style="text-align:right;">
+0.845
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.071
+</td>
+<td style="text-align:right;">
+0.263
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orleans
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+6.5
+</td>
+<td style="text-align:right;">
+9.6
+</td>
+<td style="text-align:right;">
+76.96
+</td>
+<td style="text-align:right;">
+1.6
+</td>
+<td style="text-align:right;">
+158.1
+</td>
+<td style="text-align:right;">
+43.2
+</td>
+<td style="text-align:right;">
+0.503
+</td>
+<td style="text-align:right;">
+0.361
+</td>
+<td style="text-align:right;">
+0.857
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.021
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.065
+</td>
+<td style="text-align:right;">
+0.172
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+<td style="text-align:right;">
+10.3
+</td>
+<td style="text-align:right;">
+75.61
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+155.1
+</td>
+<td style="text-align:right;">
+42.6
+</td>
+<td style="text-align:right;">
+0.534
+</td>
+<td style="text-align:right;">
+0.391
+</td>
+<td style="text-align:right;">
+0.888
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+<td style="text-align:right;">
+0.056
+</td>
+<td style="text-align:right;">
+0.181
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="making-map-file" class="section level5">
-<h5>Making Map File</h5>
+<p>This <code>merge</code> dataset is comprised of 62 rows and 16
+columns of data, with first column being the name of the
+<code>county</code>, and other 15 beings all continuous variables of
+identified indicators of the whole 62 counties of NY state.</p>
+</div>
+<div id="making-map-file" class="section level3">
+<h3>Making Map File</h3>
 <pre class="r"><code>uscounties &lt;- uscounties %&gt;% 
   filter (state_id == &quot;NY&quot;) %&gt;%
   select (county, lat, lng)
@@ -724,7 +10298,11 @@ map &lt;- merge %&gt;%
   inner_join(uscounties, by =&quot;county&quot;)
 
 write.csv(map, &quot;NY_map.csv&quot;, row.names = FALSE)</code></pre>
-</div>
+<p>This file is specifically made for the purpose of making map (in
+Shiny App). We obtained latitude and longitude data of all NY counties
+from SimpleMaps Database (<a
+href="https://simplemaps.com/data/us-counties"
+class="uri">https://simplemaps.com/data/us-counties</a>).</p>
 </div>
 </div>
 

@@ -1,7 +1,35 @@
 
+```{css, echo=FALSE}
+/* Style for the main tabs */
+.nav-tabs > li > a {
+  background-color: #A3C4E5; 
+  color: #5F5B57; 
+}
+
+/* Style for the active main tab */
+.nav-tabs > li.active > a {
+  background-color: #4276AA; 
+  color: #ffffff; 
+}
+
+/* Style for the sub-tabs */
+.tab-content .tab-pane .nav > li > a {
+  background-color: #D2D2D2; 
+  color: #3E3D3D; 
+}
+
+/* Style for the active sub-tab */
+.tab-content .tab-pane .nav > li.active > a {
+  background-color: #6D6D6D; 
+  color: #ffffff; 
+}
+```
+
+```{r}
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo=TRUE)
 library(tidyverse)
+library(ggplot2)
 library(dplyr)
 library(readxl)
 library(rvest)
@@ -10,14 +38,23 @@ library(knitr)
 library(sjPlot)
 library(sjmisc)
 library(sjlabelled)
+library(survival)
+library(kableExtra)
+library(purrr)
+library(tableone)
+library(skimr)
 ```
+```
+
 
 # Data
 
 _Source, scraping method, cleaning, etc._
 
-#### Data Import
-```{r}
+## Data Import
+
+Click `show` on the right to view the code chunk for data importing.
+```{r message = FALSE}
 lowbirthweight <- read_csv("csv_NYC_lowbirthweight.csv")
 pm2_5 <- read_csv("pm2.5.csv")
 edu_NY <- read_excel("Edu_NY.xlsx")
@@ -27,29 +64,37 @@ Age_NY <- read_excel("Age_NY.xlsx")
 Sex_NY <- read_excel("Sex_NY.xlsx")
 health <- read_excel("chir_current_data.xlsx")
 uscounties <- read_csv("uscounties.csv") #Simplemaps.com
-
 ```
 
-#### Data Wrangling  
+9 data files are obtained from publicly available sources online. These will be imported, wrangled properly, and merged to create a complete data for further analysis.
 
-##### __PM2.5 Dataset__
-```{r}
+## Data Wrangling {.tabset .tabset-fade}
+
+Click `show` on the right to view the code chunk for data importing.
+
+
+### PM2.5 Dataset  
+```{r warning=FALSE}
 pm2_5 <- pm2_5 %>% 
   janitor::clean_names()%>%
   select (county,value) %>%
   rename (annual_pm2.5 = "value")
+
+pm2_5 %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 The dataset is obtained from EPH Tracking Website from CDC (https://ephtracking.cdc.gov/DataExplorer/). This has `r nrow(pm2_5)` rows and `r ncol(pm2_5)` columns of data. In which, 2 variables are:  
   - `county`: NY county name   
   - `annual_pm2.5`: annual estimated PM2.5 concentration at each county (ug/m^3)
 
-##### __Demographic Dataset__
+### Demographic Dataset {.tabset .tabset-fade}
+
 The following set of demographic datasets is obtained from Census Reporter webpage (https://censusreporter.org/).
 
-
-
-##### Education Attainment
-```{r}
+#### Education Attainment
+```{r, warning=FALSE}
 edu <- edu_NY %>% 
   janitor::clean_names()%>%
   mutate (percentage_high_education = (bach_male+master_male+prof_male+doct_male+bach_female+master_female+prof_female+doct_female)/total) %>%
@@ -59,15 +104,18 @@ edu <- edu_NY %>%
   mutate(county = str_replace (county, "St.", "St")) %>%
   mutate(county = str_replace (county, "Stuben", "Steuben"))%>%
   select(county,percentage_high_education)
+
+edu %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```  
 This has `r nrow(edu)` rows and `r ncol(edu)` columns of data. In which, 2 variables are:  
   - `county`: NY county name   
   - `percentage_high_education`: percentage of population who finished a higher education level (higher than a bachelor degree)
 
-
-
-##### Ethinicity
-```{r}  
+#### Ethnicity
+```{r warning=FALSE}  
 race_non_hisp_white <- race_NY %>% 
   janitor::clean_names()%>%
   filter( x1 == "White Non-Hispanic") %>% 
@@ -127,6 +175,11 @@ race_merge <- race_non_hisp_white %>%
 
 race_merge <- race_merge %>% 
   mutate (percent_other = 1 - percent_non_hisp_white - percent_non_hisp_black - percent_hisp_white - percent_hisp_black)
+
+race_merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 This has `r nrow(race_merge)` rows and `r ncol(race_merge)` columns of data. In which, 6 variables are:  
   - `county`: NY county name   
@@ -137,10 +190,8 @@ This has `r nrow(race_merge)` rows and `r ncol(race_merge)` columns of data. In 
   - `percent_other`: percentage of population who are identified as any other ethinic groups    
 
 
-
-
-##### Household Income
-```{r}
+#### Household Income
+```{r warning=FALSE}
 income <- HHincome_NY %>%
   janitor::clean_names() %>% 
   filter (x1 == "percent_high_income") %>%
@@ -153,14 +204,18 @@ income <- HHincome_NY %>%
   select (county,percent_high_income ) %>%
   mutate(county = str_replace (county, "_", " ")) %>%
   mutate_at(vars(county), str_to_title)
+
+race_merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 This has `r nrow(income)` rows and `r ncol(income)` columns of data. In which, 2 variables are:  
   - `county`: NY county name   
   - `percent_high_income`: percentage of population who are at higher income households (>$75,000 annually)
 
-
-##### Median Age
-```{r}
+#### Median Age
+```{r warning=FALSE}
 age <- Age_NY %>% 
   janitor::clean_names() %>% 
   pivot_longer(
@@ -172,15 +227,18 @@ age <- Age_NY %>%
   select (county,median_age ) %>%
   mutate(county = str_replace (county, "_", " ")) %>%
   mutate_at(vars(county), str_to_title)
+
+age %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 This has `r nrow(age)` rows and `r ncol(age)` columns of data. In which, 2 variables are:  
   - `county`: NY county name   
   - `median_age`: median age of the population at each county  
 
-
-
-##### Sex
-```{r}
+#### Sex
+```{r warning=FALSE}
 sex <- Sex_NY %>% 
   janitor::clean_names() %>% 
   filter (x1 == "Male:") %>%
@@ -193,26 +251,36 @@ sex <- Sex_NY %>%
   select (county,percent_male ) %>%
   mutate(county = str_replace (county, "_", " ")) %>%
   mutate_at(vars(county), str_to_title)
+
+sex%>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 This has `r nrow(sex)` rows and `r ncol(sex)` columns of data. In which, 2 variables are:  
   - `county`: NY county name   
   - `percent_male`: percentage of population who are identified as male  
 
-##### Low Birthweight Data 
-```{r}
+#### Low Birthweight Data 
+```{r warning=FALSE}
 lowbirthweight <- lowbirthweight %>% 
   janitor::clean_names()%>%
   select (region_county, percentage)%>%
   rename (county = "region_county", percent_lowbirthweight = "percentage") 
+
+lowbirthweight %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 This has `r nrow(lowbirthweight)` rows and `r ncol(lowbirthweight)` columns of data. In which, 2 variables are:  
   - `county`: NY county name   
   - `percent_lowbirthweight`: percentage of children being born being identified as low birth weight (<2,500g) (https://www.health.ny.gov/)
 
-##### Health Indicator Dataset 
+#### Health Indicator Dataset 
 The following dataset is obtained from New York State Department of Health (https://www.health.ny.gov/) that contains 4 different health indicators that will complement with the low birthweight. These 5 will act as our outcomes of interest for our regression models.
 
-```{r}
+```{r warning=FALSE}
 health <- health %>%
   janitor::clean_names()%>%
   select (geographic_area,indicator_title,topic_area,rate_percent,measurement) %>%
@@ -225,8 +293,9 @@ health <- health %>%
 cancer <- health %>% 
   filter (topic_area == "Cancer Indicators") %>% 
   filter (indicator_title == "All cancer incidence rate per 100,000") %>% 
-  select (-c(indicator_title, topic_area, measurement)) %>% 
-  rename (cancer_mortality_per_100k = "rate_percent")
+  select (-c(indicator_title, topic_area, measurement)) %>%
+  mutate(rate_percent = as.numeric(rate_percent)/10) %>%
+  rename (cancer_mortality_per_10k = "rate_percent")
 
 resp <- health %>%
   filter (topic_area == "Respiratory Disease Indicators") %>%
@@ -245,21 +314,26 @@ maternal <- health %>%
   filter (indicator_title == "Percentage of premature births with <37 weeks gestation") %>% 
   select (-c(indicator_title, topic_area, measurement)) %>% 
   rename (premature_percentage = "rate_percent")
-
-```
-They are:   
-  - `cancer_mortality_per_100k`: percentage of cancer mortality per 100 thousands people in each NY county (Cancer Indicator)    
-  - `asthma_hosp_rate_per_10k`: percentage of asthma hospitalization per 10 thousands people in each NY county (Respiratory Disease Indicator)     
-  - `cardio_hosp_rate_per_10k`": percentage of cardiovascular-disease-related hospitalization per 10 thousands people in each NY county (Cardiovascular Disease Indicator)   
-  - `premature_percentage`: percentage of children being born prematurely (<37  gestational weeks) in each NY county
-
-##### Merge dataset:
-Here we perform `inner_join()` to create 2 bigger datasets `health_merge` and `demographic_merge`. Then, we join them with our `lowbirthweight` & `pm2_5` tp make a finalized data frame called `merge`. And, we will use this for regression model. 
-```{r}
 health_merge <- maternal %>% 
   inner_join(cancer, by = "county") %>%
   inner_join(resp, by = "county") %>% 
   inner_join(cardio, by = "county") 
+
+health_merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+```
+They are:   
+  - `cancer_mortality_per_10k`: percentage of cancer mortality per 100 thousands people in each NY county (Cancer Indicator)    
+  - `asthma_hosp_rate_per_10k`: percentage of asthma hospitalization per 10 thousands people in each NY county (Respiratory Disease Indicator)     
+  - `cardio_hosp_rate_per_10k`": percentage of cardiovascular-disease-related hospitalization per 10 thousands people in each NY county (Cardiovascular Disease Indicator)   
+  - `premature_percentage`: percentage of children being born prematurely (<37  gestational weeks) in each NY county
+
+### Merge dataset
+Here we perform `inner_join()` to create 1 bigger dataset called `demographic_merge`. Then, we join them with our `lowbirthweight` & `pm2_5` to make a finalized data frame called `merge`. And, we will use this for regression model. 
+
+```{r warning=FALSE}
 
 demographic_merge <- age %>%
   inner_join(sex,  by = "county") %>%
@@ -279,12 +353,20 @@ merge <- merge %>%
   mutate(asthma_hosp_rate_per_10k = as.numeric(asthma_hosp_rate_per_10k))%>%
   mutate(cardio_hosp_rate_per_10k = as.numeric(cardio_hosp_rate_per_10k)) %>%
   mutate(premature_percentage = as.numeric(premature_percentage))%>%
-  mutate(cancer_mortality_per_100k = as.numeric(cancer_mortality_per_100k))
+  mutate(cancer_mortality_per_10k = as.numeric(cancer_mortality_per_10k))
 
+merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 
-##### Making Map File
-```{r}
+This `merge` dataset is comprised of `r nrow(merge)` rows and `r ncol(merge)` columns of data, with first column being the name of the `county`, and other 15 beings all continuous variables of identified indicators of the whole 62 counties of NY state.  
+
+
+
+### Making Map File
+```{r warning=FALSE}
 uscounties <- uscounties %>% 
   filter (state_id == "NY") %>%
   select (county, lat, lng)
@@ -295,3 +377,5 @@ map <- merge %>%
 write.csv(map, "NY_map.csv", row.names = FALSE)
 
 ```
+This file is specifically made for the purpose of making map (in Shiny App). We obtained latitude and longitude data of all NY counties from SimpleMaps Database (https://simplemaps.com/data/us-counties).
+

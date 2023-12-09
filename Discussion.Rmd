@@ -1,0 +1,28 @@
+# Discussion
+
+_What were your findings? Are they what you expect? What insights into the data can you make?_
+
+The stepwie selected models produced from the data based on one of 5 outcomes selected (Low Birth Weight Rate, Premature Birth Weight Rate, Cancer Mortality Rate, Asthma Hospitalization Rate, and Cardiovascular Disease Rate), are dissimilar on the different estimate parameters they fit at first glance. However upon closer inspection, there are certain estimate parameters that are shared amongst these models which may have significant implications on health outcome disparities. Though it is important to keep in mind that these models merely illustrate an association.
+
+## Race and Health Outcomes 
+
+For all 5 models fitted to each health outcome, race is a common predictor that was estimated to be a significant predictor of the outcomes. In each model, race consistently and significantly predicts poorer health outcomes in certain races that are commonmly denoted as underrepresented. Our models include percent non-hispanic black, percent non-hispanic white, percent hispanic white, and percent hispanic black as all significant predictors in some if not all models.
+
+On speculation, it is possible since these populations are typically underrepresented, it's likely that poorer health outcomes and likely due to surrounding socioeconomic envrionment, determinants of health, and disparities and neglect in these populations and can be a target of policy.
+
+## Age and Health Outcomes
+
+For most models fitted to each health outcome, median age is a common predictor that was estimate to be a significant predictor of the outcomes. 3 of the 4 signifncant models illustrate that age can lead to poorer health outcomes. Low Birth Weight Rate is the only model where age predicts a lower Low Birth Weight Rate outcome. 
+
+Contrast to race, age is a more biological factor and an indicator of general health and fitness. The effect of age on healht outcomes is two-fold. On one end, older age leads to stability and possibly healthier lifestyle as an individual becomes more self-sufficient which may explain the better health outcome in Low Birth Weight Rate. However, older age also leads to breakdown of the body and thus health outcomes that are more vulnerable to old age, produce a poorer healht outcome.
+
+Rather than policy, this analysis provides insight into how timing and age may play a role in how one may maintain health lifestyle. Perhaps, families should wait to have children, once there is stability, however not too late where age leads to poorer healht outcomes. 
+
+## High Income and Health Outcomes
+
+Though not as prominent as age and race, two models had high income as a common predictor. These models produced initially confusing results in that high income leads to better health outcome in cancer mortality rate however leads to poorer health outcome in asthma hospitalization rate. 
+
+On further speculation, these two health outcomes are fundamentally different. High income can be seen as a factor that leads to access to health care and access to quality care. In the case of cancer mortality rate, access to quality care can lead to positive health outcomes in that cancer treatment is more successful for those that have higher income. In the case of asthma hospitalization rate, the outcome is less life-threatening than cancer mortality rate. Thus, high income may predict higher hospitalization rate because those that are high income are able to afford treatment for an outcome that is not severe. 
+
+## Conclusion
+This piece of analysis can open discussions within counties that may experience higher percentages of these whether these associations in poorer health outcomes are true and can hopfully lead to policy changes that can address these issues

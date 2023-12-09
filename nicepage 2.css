@@ -42589,17 +42589,25 @@ a.u-link.u-text-hover-grey-90:hover {
   font-size: 1rem;
 }
 
+.u-header .u-nav-3 {
+  font-size: 1rem;
+}
+
+.u-header .u-nav-4 {
+  font-size: 1rem;
+}
+
 .u-header .u-menu-2 {
   margin: -68px auto 0 23px;
 }
 
-.u-header .u-nav-3 {
+.u-header .u-nav-5 {
   font-family: NewsCycle-Bold;
   font-size: 1.5rem;
   text-transform: uppercase;
 }
 
-.u-header .u-nav-4 {
+.u-header .u-nav-6 {
   font-size: 1.25rem;
 }
 @media (max-width: 1199px) {
