@@ -1,0 +1,501 @@
+
+
+```{css, echo=FALSE}
+/* Style for the main tabs */
+.nav-tabs > li > a {
+  background-color: #A3C4E5; 
+  color: #5F5B57; 
+}
+
+/* Style for the active main tab */
+.nav-tabs > li.active > a {
+  background-color: #4276AA; 
+  color: #ffffff; 
+}
+
+/* Style for the sub-tabs */
+.tab-content .tab-pane .nav > li > a {
+  background-color: #D2D2D2; 
+  color: #3E3D3D; 
+}
+
+/* Style for the active sub-tab */
+.tab-content .tab-pane .nav > li.active > a {
+  background-color: #6D6D6D; 
+  color: #ffffff; 
+}
+```
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(readxl)
+library(rvest)
+library(plotly)
+library(knitr)
+library(sjPlot)
+library(sjmisc)
+library(sjlabelled)
+library(survival)
+library(kableExtra)
+library(purrr)
+library(tableone)
+library(skimr)
+
+lowbirthweight <- read_csv("csv_NYC_lowbirthweight.csv")
+pm2_5 <- read_csv("pm2.5.csv")
+edu_NY <- read_excel("Edu_NY.xlsx")
+race_NY <- read_excel("Race_NY.xlsx")
+HHincome_NY <- read_excel("HHincome_NY.xlsx")
+Age_NY <- read_excel("Age_NY.xlsx")
+Sex_NY <- read_excel("Sex_NY.xlsx")
+health <- read_excel("chir_current_data.xlsx")
+uscounties <- read_csv("uscounties.csv") #Simplemaps.com
+
+pm2_5 <- pm2_5 %>% 
+  janitor::clean_names()%>%
+  select (county,value) %>%
+  rename (annual_pm2.5 = "value")
+
+pm2_5 %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+edu <- edu_NY %>% 
+  janitor::clean_names()%>%
+  mutate (percentage_high_education = (bach_male+master_male+prof_male+doct_male+bach_female+master_female+prof_female+doct_female)/total) %>%
+  filter(str_detect (name, " County, NY")) %>% 
+  mutate(county = str_replace (name, " County, NY", "")) %>%
+  select(county,percentage_high_education) %>%
+  mutate(county = str_replace (county, "St.", "St")) %>%
+  mutate(county = str_replace (county, "Stuben", "Steuben"))%>%
+  select(county,percentage_high_education)
+
+edu %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+race_non_hisp_white <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "White Non-Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_non_hisp_white") %>% 
+  select (county,percent_non_hisp_white) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_non_hisp_white ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_non_hisp_black <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "Black Non-Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_non_hisp_black") %>% 
+  select (county,percent_non_hisp_black) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_non_hisp_black ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_hisp_white <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "White Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_hisp_white") %>% 
+  select (county,percent_hisp_white) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_hisp_white ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_hisp_black <- race_NY %>% 
+  janitor::clean_names()%>%
+  filter( x1 == "Black Hispanic") %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_hisp_black") %>% 
+  select (county,percent_hisp_black) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_hisp_black ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_merge <- race_non_hisp_white %>%
+  inner_join(race_non_hisp_black, by = "county") %>%
+  inner_join(race_hisp_white, by = "county") %>%
+  inner_join(race_hisp_black, by = "county")
+
+race_merge <- race_merge %>% 
+  mutate (percent_other = 1 - percent_non_hisp_white - percent_non_hisp_black - percent_hisp_white - percent_hisp_black)
+
+race_merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+income <- HHincome_NY %>%
+  janitor::clean_names() %>% 
+  filter (x1 == "percent_high_income") %>%
+   pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_high_income") %>%
+  select (county,percent_high_income) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_high_income ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+race_merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+age <- Age_NY %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "median_age") %>%
+  select (county,median_age) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,median_age ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+age %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+sex <- Sex_NY %>% 
+  janitor::clean_names() %>% 
+  filter (x1 == "Male:") %>%
+  pivot_longer(
+    albany_county_ny : yates_county_ny,
+    names_to = "county",
+    values_to = "percent_male") %>%
+  select (county,percent_male) %>%
+  separate(county, into = c("county", "x"), sep = "_county_") %>%
+  select (county,percent_male ) %>%
+  mutate(county = str_replace (county, "_", " ")) %>%
+  mutate_at(vars(county), str_to_title)
+
+sex%>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+lowbirthweight <- lowbirthweight %>% 
+  janitor::clean_names()%>%
+  select (region_county, percentage)%>%
+  rename (county = "region_county", percent_lowbirthweight = "percentage") 
+
+lowbirthweight %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+health <- health %>%
+  janitor::clean_names()%>%
+  select (geographic_area,indicator_title,topic_area,rate_percent,measurement) %>%
+  filter( str_detect (geographic_area, " County")) %>% 
+  mutate (county = str_replace (geographic_area, " County", "")) %>%
+  select (county, everything()) %>%
+  select (-geographic_area) %>%
+  filter(topic_area == "Cancer Indicators" | topic_area == "Respiratory Disease Indicators" | topic_area == "Cardiovascular Disease Indicators" | topic_area == "Maternal and Infant Health Indicators")
+  
+cancer <- health %>% 
+  filter (topic_area == "Cancer Indicators") %>% 
+  filter (indicator_title == "All cancer incidence rate per 100,000") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>%
+  mutate(rate_percent = as.numeric(rate_percent)/10) %>%
+  rename (cancer_mortality_per_10k = "rate_percent")
+
+resp <- health %>%
+  filter (topic_area == "Respiratory Disease Indicators") %>%
+  filter (indicator_title == "Asthma hospitalization rate per 10,000") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>% 
+  rename (asthma_hosp_rate_per_10k = "rate_percent")
+
+cardio <- health %>%
+  filter (topic_area == "Cardiovascular Disease Indicators") %>%
+  filter (indicator_title == "Cardiovascular disease hospitalization rate per 10,000") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>% 
+  rename (cardio_hosp_rate_per_10k = "rate_percent")
+
+maternal <- health %>%
+  filter (topic_area == "Maternal and Infant Health Indicators") %>%
+  filter (indicator_title == "Percentage of premature births with <37 weeks gestation") %>% 
+  select (-c(indicator_title, topic_area, measurement)) %>% 
+  rename (premature_percentage = "rate_percent")
+health_merge <- maternal %>% 
+  inner_join(cancer, by = "county") %>%
+  inner_join(resp, by = "county") %>% 
+  inner_join(cardio, by = "county") 
+
+health_merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+demographic_merge <- age %>%
+  inner_join(sex,  by = "county") %>%
+  inner_join(income, by = "county") %>% 
+  inner_join(race_merge, by = "county") %>% 
+  inner_join(edu, by = "county") %>%
+  mutate(county = str_replace (county, "St ", "St. "))
+  
+
+merge <- lowbirthweight %>% 
+  inner_join(pm2_5, by = "county") %>%
+  inner_join(health_merge, by = "county") %>% 
+  inner_join(demographic_merge, by = "county") 
+
+merge <- merge %>% 
+  select (county, annual_pm2.5,everything())%>%
+  mutate(asthma_hosp_rate_per_10k = as.numeric(asthma_hosp_rate_per_10k))%>%
+  mutate(cardio_hosp_rate_per_10k = as.numeric(cardio_hosp_rate_per_10k)) %>%
+  mutate(premature_percentage = as.numeric(premature_percentage))%>%
+  mutate(cancer_mortality_per_10k = as.numeric(cancer_mortality_per_10k))
+
+merge %>% 
+  knitr::kable(digits = 3) %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) %>% 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+uscounties <- uscounties %>% 
+  filter (state_id == "NY") %>%
+  select (county, lat, lng)
+
+map <- merge %>% 
+  inner_join(uscounties, by ="county")
+
+write.csv(map, "NY_map.csv", row.names = FALSE)
+```  
+
+# Statistical Analysis 
+
+_If you undertake formal statistical analyses, describe these in detail_
+
+## Method
+After cleaning the data, we then look at the effect that the annual concentration of pm 2.5 separately has on multiple outcomes among 62 counties in New York, including low birth weight rate, premature birth rate, cancer mortality rate, asthma-related hospitalization rate, and cardiovascular-disease-related hospitalization rate. 
+
+Since all of the outcomes are measured as rates (i.e., continuous), we use __linear regression (LR) models__ to assess the effect of annual concentration of pm 2.5 on the outcomes of interests, adjusting for age, sex, ethnicity, education, income. In our models: 
+
+- Age is reported as a continuous variable that reflects the median age of each county.
+
+- Sex is reported as a continuous variable that reflects the percentage of male in each county. The variable that reflects the percentage of female in each county is not included in our model to avoid perfect multicollinearity.
+
+- Ethnicity is reported as a continuous variable that reflects the percentage of different ethnicity groups in each county, including Hispanic-Black, Hispanic-White, non-Hispanic-Black, non-Hispanic-White, and Others (if Asian, Native American, or belong to two or more race). The variable that reflects the percentage of people who belong to the category Others is not included in our model to avoid perfect multicollinearity.
+
+- Education is reported as a continuous variable that reflects the percentage of people who have obtained one or more higher education degrees in each county.
+
+- Income is reported as a continuous variable that reflects the percentage of household of each county that have annual income exceeding $75,000.
+
+For each of the five outcomes of interest, we first start with the full model:
+
+_Outcome = Annual pm 2.5 concentration + median age + percentage of male + percentage of Hispanic-Black + percentage of Hispanic-White + percentage of non-Hispanic-Black + percentage of non-Hispanic-White + percentage of household income exceeding 75,000 USD + percentage of people obtained higher education_
+
+We then perform __bidirectional stepwise selection__ on all five models and output the best models. The full model and the resulting best models after stepwise selection for each outcome are detailed below:
+
+## LR models by Outcomes {.tabset .tabset-fade}
+
+### Low Birth Weight Rate 
+
+#### Stepwise regression 
+
+__Full model__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_birthweight_adjusted <-lm(percent_lowbirthweight ~ annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)
+```
+
+__Stepwise selection__
+```{r message=FALSE, class.source = 'fold-show'}
+lm_pm2.5_birthweight_adjusted_best <- step(lm_pm2.5_birthweight_adjusted, direction = 'both', trace=FALSE)
+
+summary(lm_pm2.5_birthweight_adjusted_best)%>%
+  tab_model()
+```
+
+
+#### Interpretation
+
+The best model that was outputted by the stepwise regression is 
+
+_low birth weight = 11.53 - 0.11(median age) + 8.05 (percent_non_hisp_black)_
+
+- On average, for a county whose median age is 0 and has 0% of non-Hispanic-Black, the expected low birth weight rate is 11.5% (no practical meaning). Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the intercept is significantly different than 0.
+
+- On average, for every unit increase of median age (1 year), the expected low birth weight rate of the county decreases by 0.11%. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0.
+
+- On average, for every unit increase in the percentage of non-Hispanic-Black, the expected low birth weight rate of the county increases by 8.05%. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-Black is significantly different than 0.
+
+The adjusted R-squared of 0.249 implies that 24.9% of the variation in the response variable can be explained by its linear relationship with the set of the 2 predictors (median age and percentage of non-Hispanic-Black).
+
+
+### Premature Birth Weight Rate 
+
+#### Stepwise regression 
+
+__Full model__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_premature_adjusted <-lm(premature_percentage ~ annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)
+```
+
+__Stepwise selection__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_premature_adjusted_best <- step(lm_pm2.5_premature_adjusted, direction = 'both', trace=FALSE)
+
+summary(lm_pm2.5_premature_adjusted_best)%>%
+  tab_model()
+```
+
+#### Interpretation
+
+The best model that was outputted by the stepwise regression is 
+
+_premature birth weight = 4.88 + 0.08(median age) + 8.03 (percent_non_hisp_black)_
+
+- On average, for a county whose median age is 0 and has 0% of non-Hispanic-Black, the expected low birth weight rate is 4.88% (no practical meaning). Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the intercept is significantly different than 0.
+
+- On average, for every unit increase of median age (1 year), the expected low birth weight rate of the county decreases by 0.11%. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0.
+
+- On average, for every unit increase in the percentage of non-Hispanic-Black, the expected low birth weight rate of the county increases by 8.03%. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-Black is significantly different than 0.
+
+The adjusted R-squared of 0.105 implies that 10.5% of the variation in the response variable can be explained by its linear relationship with the set of the 2 predictors (median age and percentage of non-Hispanic-Black).
+
+### Cancer Mortality Rate {.tabset .tabset-fade}
+Detailed below are the the initial model, the final model and the interpretation for each outcome.
+
+#### Stepwise regression 
+
+__Full model__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_cancer_adjusted <-lm(cancer_mortality_per_10k ~annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)
+```
+
+__Stepwise selection__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_cancer_adjusted_best<-step(lm_pm2.5_cancer_adjusted, direction = 'both', trace=FALSE)
+
+summary (lm_pm2.5_cancer_adjusted_best)%>%
+  tab_model()
+```
+
+#### Interpretation
+
+The best model that was outputted by the stepwise regression is 
+
+_cancer mortality rate = -1.85 + 13.27(annual pm 2.5) + 13.14(median age) - 213.49(percent high income) + 464.03(percent non hisp white) + 536.28(percent non hisp black) +  1023.82(percent hisp white) - 1787.43(percent hisp black) - 574.15(percent male)_
+
+- On average, for a county whose annual pm 2.5 concentration is 0, median age is 0, has 0% of high income, has 0% of non-Hispanic-Black, has 0% of non-Hispanic-White, has 0% of Hispanic-Black, has 0% of Hispanic-White, has 0% of male, the expected low birth weight rate is -1.85 case per 100,000 people (no practical meaning). However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the intercept is significantly different than 0.
+
+- On average, for every unit increase of annual pm 2.5 concentration, the expected cancer mortality rate of the county increases by 13.27 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for annual pm 2.5 concentration is significantly different than 0. 
+
+- On average, for every unit increase of median age (1 year), the expected cancer mortality rate of the county decreases by 13.14 cases per 100,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0. 
+
+- On average, for every unit increase in the percentage of high income, the expected cancer mortality rate of the county decreases by 213.49 cases per 100,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of high income is significantly different than 0.
+
+- On average, for every unit increase of percentage of non-Hispanic-White, the expected cancer mortality rate of the county increases by 464.03 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-White is significantly different than 0. 
+
+- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 536.28 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-Black is significantly different than 0. 
+
+- On average, for every unit increase of percentage Hispanic-White, the expected cancer mortality rate of the county increases by 1023.08 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of Hispanic-White is significantly different than 0. 
+
+- On average, for every unit increase of percentage Hispanic-Black, the expected cancer mortality rate of the county decreases by 1787.43 deaths per 100,00 people.  However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient percentage of Hispanic-Black is significantly different than 0.
+
+- On average, for every unit increase of percentage of male, the expected cancer mortality rate of the county decreases by 574.15 deaths per 100,00 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for the percentage of male is significantly different than 0.
+
+The adjusted R-squared of 0.780 implies that 70.8% of the variation in the response variable can be explained by its linear relationship with the set of the 8 predictors (annual pm 2.5 conc., median age, percentage of high income, percentage of 4 ethnicity groups, percentage of male).
+
+### Asthma Hospitalization Rate {.tabset .tabset-fade}
+Detailed below are the the initial model, the final model and the interpretation for each outcome.
+
+#### Stepwise regression
+
+__Full model__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_asthma_adjusted <-lm(asthma_hosp_rate_per_10k ~ annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)
+```
+
+__Stepwise selection__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_asthma_adjusted_best <- step(lm_pm2.5_asthma_adjusted, direction = 'both', trace=FALSE)
+
+summary(lm_pm2.5_asthma_adjusted_best)%>%
+  tab_model()
+```
+
+#### Interpretation
+
+The best model that was outputted by the stepwise regression is 
+
+_asthma hospitalization rate = 1.36 + 4.65(percent high income) + 13.52(percent non hisp black) + 366.67 (percent hisp black) - 5.31(percent high education)_
+
+- On average, for a county who has zero percent of high income, has zero percent of non-Hispanic-Black, has zero percent of Hispanic-Black, has zero percent of high education, the expected asthma hospitalization rate is 1.85 case per 10,000 people (no practical meaning). Since the p-value is smaller han 0.05, we have sufficient evidence to claim that the intercept is significantly different than 0.
+
+- On average, for every unit increase in the percentage of high income, the expected asthma hospitalization rate of the county increases by 4.65 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of high incomeis significantly different than 0.
+
+- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 13.52 deaths per 10,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of non-Hispanic-Black is significantly different than 0. 
+
+- On average, for every unit increase of percentage of Hispanic-Black, the expected cancer mortality rate of the county increases by 366.67 deaths per 10,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of Hispanic-Black is significantly different than 0. 
+
+- On average, for every unit increase of percentage of high education, the expected cancer mortality rate of the county decreases by 5.31 deaths per 10,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of higher education is significantly different than 0. 
+
+The adjusted R-squared of 0.930 implies that 93.0% of the variation in the response variable can be explained by its linear relationship with the set of the 4 predictors (percentage of high income, percentage of non-Hispanic-Black, percentage of Hispanic-Black, percentage of higher education).
+
+### Cardiovascular Disease Rate {.tabset .tabset-fade}
+Detailed below are the the initial model, the final model and the interpretation for each outcome.
+
+#### Stepwise regression
+
+__Full model__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_cardio_adjusted <-lm(cardio_hosp_rate_per_10k ~annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)
+```
+
+__Stepwise selection__
+```{r warning=FALSE, class.source = 'fold-show'}
+lm_pm2.5_cardio_adjusted_best<-step(lm_pm2.5_cardio_adjusted, direction = 'both', trace=FALSE)
+
+summary (lm_pm2.5_cardio_adjusted_best)%>%
+  tab_model()
+```
+
+#### Interpretation
+
+The best model that was outputted by the stepwise regression is 
+
+_cardiovascular disease hospitalization rate = 157.52 + 6.97(annual pm 2.5) + 1.73(median age) + 117.26 (percent non hisp white) + 222.99(percent non hisp black) +  439.56(percent hisp white) - 148.61.43(percent high education) - 405.53(percent male)_
+
+On average, for a county whose annual pm 2.5 concentration is 0, median age is 0, has zero percent of non-Hispanic-White, has zero percent of non-Hispanic-Black, has zero percent of Hispanic-White, has zero percent of high education, has zero percent of male, the expected cardiovascular disease hospitalization rate is 157.52 case per 10,000 people (no practical meaning). However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the intercept is significantly different than 0.
+
+- On average, for every unit increase of annual pm 2.5 concentration, the expected cardiovascular disease hospitalization rate of the county increases by 6.97cases per 10,000 people. However, since the p-value is smaller than 0.05, we do not have sufficient evidence to claim that the beta coefficient for annual pm 2.5 concentration is significantly different than 0. 
+
+- On average, for every unit increase of median age (1 year), the expected cardiovascular disease hospitalization rate of the county decreases by 1.73 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0. 
+
+- On average, for every unit increase of percent of non-Hispanic-White, the expected cardiovascular disease hospitalization rate of the county increases by 177.26 cases per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for the percent of non-Hispanic-White is significantly different than 0. 
+
+- On average, for every unit increase of percent of non-Hispanic-Black, the expected cardiovascular disease hospitalization rate of the county increases by 222.99 cases per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for percent of non-Hispanic-Black is significantly different than 0.
+
+- On average, for every unit increase of percent of Hispanic-White, the expected cardiovascular disease hospitalization rate of the county increases by 439.56 cases per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for percent of Hispanic-White is significantly different than 0. 
+
+- On average, for every unit increase of percent of higher education, the expected cardiovascular disease hospitalization rate of the county decreases by 148.61 cases per 10,000 people. Since the p-value is larger than 0.05, we have sufficient evidence to claim that the beta coefficient for percent of higher education is significantly different than 0. 
+
+- On average, for every unit increase of percentage of male, the expected cardiovascular disease hospitalization rate of the county decreases by 405.53 cases per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for percentage male is significantly different than 0. 
+
+The adjusted R-squared of 0.242 implies that 24.2% of the variation in the response variable can be explained by its linear relationship with the set of the 7 predictors (annual pm 2.5 concentration, median age, percent non-Hispanic-White, percent non-Hispanic-Black, percent Hispanic-White, percentage of higher education, percentage of male).

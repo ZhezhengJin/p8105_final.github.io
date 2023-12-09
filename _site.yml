@@ -11,8 +11,10 @@ navbar:
       href: Related.html
     - text: "Our Data"
       href: Data.html
-    - text: "Data Visualized"
+    - text: "EDA"
       href: EDA.html
+    - text: "Statistical Regression"
+      href: Regression.html
     - text: "Discussion"
       href: Discussion.html
     - text: "Shiny App"

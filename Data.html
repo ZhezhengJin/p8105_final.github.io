@@ -342,7 +342,10 @@ div.tocify {
   <a href="Data.html">Our Data</a>
 </li>
 <li>
-  <a href="EDA.html">Data Visualized</a>
+  <a href="EDA.html">EDA</a>
+</li>
+<li>
+  <a href="Regression.html">Statistical Regression</a>
 </li>
 <li>
   <a href="Discussion.html">Discussion</a>
@@ -422,18 +425,14 @@ div.tocify {
   color: #ffffff; 
 }
 </style>
-<pre><code>
-
-# Data
-
-_Source, scraping method, cleaning, etc._
-
-## Data Import
-
-Click `show` on the right to view the code chunk for data importing.
-
-```r
-lowbirthweight &lt;- read_csv(&quot;csv_NYC_lowbirthweight.csv&quot;)
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p><em>Source, scraping method, cleaning, etc.</em></p>
+<div id="data-import" class="section level2">
+<h2>Data Import</h2>
+<p>Click <code>show</code> on the right to view the code chunk for data
+importing.</p>
+<pre class="r"><code>lowbirthweight &lt;- read_csv(&quot;csv_NYC_lowbirthweight.csv&quot;)
 pm2_5 &lt;- read_csv(&quot;pm2.5.csv&quot;)
 edu_NY &lt;- read_excel(&quot;Edu_NY.xlsx&quot;)
 race_NY &lt;- read_excel(&quot;Race_NY.xlsx&quot;)
@@ -445,6 +444,7 @@ uscounties &lt;- read_csv(&quot;uscounties.csv&quot;) #Simplemaps.com</code></pr
 <p>9 data files are obtained from publicly available sources online.
 These will be imported, wrangled properly, and merged to create a
 complete data for further analysis.</p>
+</div>
 <div id="data-wrangling" class="section level2 tabset tabset-fade">
 <h2 class="tabset tabset-fade">Data Wrangling</h2>
 <p>Click <code>show</code> on the right to view the code chunk for data
@@ -10323,6 +10323,7 @@ Shiny App). We obtained latitude and longitude data of all NY counties
 from SimpleMaps Database (<a
 href="https://simplemaps.com/data/us-counties"
 class="uri">https://simplemaps.com/data/us-counties</a>).</p>
+</div>
 </div>
 </div>
 
