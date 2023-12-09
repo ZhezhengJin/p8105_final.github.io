@@ -17,7 +17,7 @@ navbar:
       href: Disscussion.html
     - text: "Shiny App"
       href: https://zj2358.shinyapps.io/birthweight_shiny/
-    - icon: fa-evenlope fa-lg
+    - icon: fa-envelope fa-lg
       href: 'mailto:zj2358@cumc.columbia.edu,kl3453@cumc.columbia.edu,nl2836@cumc.columbia.edu,dqn2104@cumc.columbia.edu'
     - icon: fa-github fa-lg
     - menu:
