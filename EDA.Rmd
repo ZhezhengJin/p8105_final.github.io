@@ -288,8 +288,6 @@ write.csv(map, "NY_map.csv", row.names = FALSE)
 
 # EDA {.tabset .tabset-fade}
 
-_Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas._
-
 
 ## Descriptive Summary
 
@@ -683,5 +681,4 @@ cardio_graph
 TOP 5: <span style="color:red;"> (Montgomery, 200.1), (Greene, 192.3), (Wayne, 191), (Niagara, 182.8), (Sullivan, 181.8) </span>.
 
 BOTTOM 5: <span style="color:blue;"> (Tompskin ,80.4), (Tioga , 84.3), (Chautauqua, 90.2), (Rockland, 104.4), (Essex, 105.8) </span>. 
-
 

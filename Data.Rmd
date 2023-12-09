@@ -48,8 +48,6 @@ library(skimr)
 
 # Data
 
-_Source, scraping method, cleaning, etc._
-
 ## Data Import
 
 Click `show` on the right to view the code chunk for data importing.

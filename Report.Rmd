@@ -61,8 +61,6 @@ library(skimr)
 
 # Motivation
 
-_Provide an overview of the project goals and motivation_
-
 - The motivation for a project exploring the correlation between low birth weight, premature birth rate, cancer mortality rate, cardiovascular disease hospitalization rate, asthma hospitalization rate and PM2.5 concentration, as well as socioeconomic, racial, education, and gender factors across the 62 counties of New York State, stems from a compelling public health imperative. 
 
 - All the outcomes of interest are critical indicators of population health. By examining the impact of fine particulate pollution, this project aims to uncover environmental health disparities that disproportionately affect under-served communities. 
@@ -72,8 +70,6 @@ _Provide an overview of the project goals and motivation_
 - Furthermore, by considering gender-specific vulnerabilities,the project aims to provide a comprehensive overview of the risk landscape, fostering community awareness and prompting action to improve air quality and health equity in one of the most densely populated urban areas in the world.
 
 # Related Work
-
-_Anything that inspired you, such as a paper, a web site, or something we discussed in class._
 
 ```{r}
 htmltools::tags$iframe(
@@ -94,8 +90,6 @@ We aim to assess the impact of PM2.5 concentration on various health outcomes ac
 
 
 # Data
-
-_Source, scraping method, cleaning, etc._
 
 ## Data Import
 
@@ -427,8 +421,6 @@ This file is specifically made for the purpose of making map (in Shiny App). We 
 
 
 # EDA {.tabset .tabset-fade}
-
-_Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas._
 
 
 ## Descriptive Summary
@@ -827,8 +819,6 @@ BOTTOM 5: <span style="color:blue;"> (Tompskin ,80.4), (Tioga , 84.3), (Chautauq
 
 # Statistical Analysis 
 
-_If you undertake formal statistical analyses, describe these in detail_
-
 ## Method
 After cleaning the data, we then look at the effect that the annual concentration of pm 2.5 separately has on multiple outcomes among 62 counties in New York, including low birth weight rate, premature birth rate, cancer mortality rate, asthma-related hospitalization rate, and cardiovascular-disease-related hospitalization rate. 
 
@@ -940,23 +930,23 @@ The best model that was outputted by the stepwise regression is
 
 _cancer mortality rate = -1.85 + 13.27(annual pm 2.5) + 13.14(median age) - 213.49(percent high income) + 464.03(percent non hisp white) + 536.28(percent non hisp black) +  1023.82(percent hisp white) - 1787.43(percent hisp black) - 574.15(percent male)_
 
-- On average, for a county whose annual pm 2.5 concentration is 0, median age is 0, has 0% of high income, has 0% of non-Hispanic-Black, has 0% of non-Hispanic-White, has 0% of Hispanic-Black, has 0% of Hispanic-White, has 0% of male, the expected low birth weight rate is -1.85 case per 100,000 people (no practical meaning). However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the intercept is significantly different than 0.
+- On average, for a county whose annual pm 2.5 concentration is 0, median age is 0, has 0% of high income, has 0% of non-Hispanic-Black, has 0% of non-Hispanic-White, has 0% of Hispanic-Black, has 0% of Hispanic-White, has 0% of male, the expected low birth weight rate is -1.85 case per 10,000 people (no practical meaning). However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the intercept is significantly different than 0.
 
-- On average, for every unit increase of annual pm 2.5 concentration, the expected cancer mortality rate of the county increases by 13.27 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for annual pm 2.5 concentration is significantly different than 0. 
+- On average, for every unit increase of annual pm 2.5 concentration, the expected cancer mortality rate of the county increases by 13.27 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for annual pm 2.5 concentration is significantly different than 0. 
 
-- On average, for every unit increase of median age (1 year), the expected cancer mortality rate of the county decreases by 13.14 cases per 100,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0. 
+- On average, for every unit increase of median age (1 year), the expected cancer mortality rate of the county decreases by 13.14 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0. 
 
-- On average, for every unit increase in the percentage of high income, the expected cancer mortality rate of the county decreases by 213.49 cases per 100,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of high income is significantly different than 0.
+- On average, for every unit increase in the percentage of high income, the expected cancer mortality rate of the county decreases by 213.49 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of high income is significantly different than 0.
 
-- On average, for every unit increase of percentage of non-Hispanic-White, the expected cancer mortality rate of the county increases by 464.03 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-White is significantly different than 0. 
+- On average, for every unit increase of percentage of non-Hispanic-White, the expected cancer mortality rate of the county increases by 464.03 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-White is significantly different than 0. 
 
-- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 536.28 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-Black is significantly different than 0. 
+- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 536.28 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-Black is significantly different than 0. 
 
-- On average, for every unit increase of percentage Hispanic-White, the expected cancer mortality rate of the county increases by 1023.08 deaths per 100,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of Hispanic-White is significantly different than 0. 
+- On average, for every unit increase of percentage Hispanic-White, the expected cancer mortality rate of the county increases by 1023.08 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of Hispanic-White is significantly different than 0. 
 
-- On average, for every unit increase of percentage Hispanic-Black, the expected cancer mortality rate of the county decreases by 1787.43 deaths per 100,00 people.  However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient percentage of Hispanic-Black is significantly different than 0.
+- On average, for every unit increase of percentage Hispanic-Black, the expected cancer mortality rate of the county decreases by 1787.43 deaths per 10,000 people.  However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient percentage of Hispanic-Black is significantly different than 0.
 
-- On average, for every unit increase of percentage of male, the expected cancer mortality rate of the county decreases by 574.15 deaths per 100,00 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for the percentage of male is significantly different than 0.
+- On average, for every unit increase of percentage of male, the expected cancer mortality rate of the county decreases by 574.15 deaths per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for the percentage of male is significantly different than 0.
 
 The adjusted R-squared of 0.780 implies that 70.8% of the variation in the response variable can be explained by its linear relationship with the set of the 8 predictors (annual pm 2.5 conc., median age, percentage of high income, percentage of 4 ethnicity groups, percentage of male).
 
@@ -988,11 +978,11 @@ _asthma hospitalization rate = 1.36 + 4.65(percent high income) + 13.52(percent 
 
 - On average, for every unit increase in the percentage of high income, the expected asthma hospitalization rate of the county increases by 4.65 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of high incomeis significantly different than 0.
 
-- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 13.52 deaths per 10,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of non-Hispanic-Black is significantly different than 0. 
+- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 13.52 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of non-Hispanic-Black is significantly different than 0. 
 
-- On average, for every unit increase of percentage of Hispanic-Black, the expected cancer mortality rate of the county increases by 366.67 deaths per 10,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of Hispanic-Black is significantly different than 0. 
+- On average, for every unit increase of percentage of Hispanic-Black, the expected cancer mortality rate of the county increases by 366.67 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of Hispanic-Black is significantly different than 0. 
 
-- On average, for every unit increase of percentage of high education, the expected cancer mortality rate of the county decreases by 5.31 deaths per 10,00 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of higher education is significantly different than 0. 
+- On average, for every unit increase of percentage of high education, the expected cancer mortality rate of the county decreases by 5.31 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for the percentage of higher education is significantly different than 0. 
 
 The adjusted R-squared of 0.930 implies that 93.0% of the variation in the response variable can be explained by its linear relationship with the set of the 4 predictors (percentage of high income, percentage of non-Hispanic-Black, percentage of Hispanic-Black, percentage of higher education).
 
@@ -1040,9 +1030,11 @@ The adjusted R-squared of 0.242 implies that 24.2% of the variation in the respo
 
 # Discussion
 
-_What were your findings? Are they what you expect? What insights into the data can you make?_
-
 The stepwie selected models produced from the data based on one of 5 outcomes selected (Low Birth Weight Rate, Premature Birth Weight Rate, Cancer Mortality Rate, Asthma Hospitalization Rate, and Cardiovascular Disease Rate), are dissimilar on the different estimate parameters they fit at first glance. However upon closer inspection, there are certain estimate parameters that are shared amongst these models which may have significant implications on health outcome disparities. Though it is important to keep in mind that these models merely illustrate an association.
+
+## PM2.5 and Health Outcomes
+
+Despite being one of the main predictors and plenty of literature supporting PM2.5 affect on health outcomes, PM2.5 was not seen to be significantly impacting the health outcomes we chose to describe. This was be explained by the fact that PM2.5 level being around 7.0 annually with a standard deviation 1.1. It can be said for this dataset, the air quality was consistently and similar amongst counties and thus the possible effects/associations with health outcomes could not be observed. 
 
 ## Race and Health Outcomes 
 

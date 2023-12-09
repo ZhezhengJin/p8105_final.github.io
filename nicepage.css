@@ -42552,10 +42552,7 @@ a.u-link.u-text-hover-grey-90:hover {
 /*end-variables sitestylecss*/
  .u-header {
   background-image: none;
-}
-
-.u-header .u-sheet-1 {
-  min-height: 69px;
+  min-height: 101px;
 }
 
 .u-header .u-social-icons-1 {
@@ -42565,7 +42562,7 @@ a.u-link.u-text-hover-grey-90:hover {
   width: 69px;
   min-width: 42px;
   transition-duration: 0.5s;
-  margin: 20px -35px 0 auto;
+  margin: 62px calc(((100% - 1140px) / 2) + -35px) 0 auto;
 }
 
 .u-header .u-icon-1 {
@@ -42577,7 +42574,7 @@ a.u-link.u-text-hover-grey-90:hover {
 }
 
 .u-header .u-menu-1 {
-  margin: -49px auto 0 -85px;
+  margin: -92px auto 32px calc(((100% - 1140px) / 2) + -78px);
 }
 
 .u-header .u-nav-1 {
@@ -42596,37 +42593,41 @@ a.u-link.u-text-hover-grey-90:hover {
     width: 30px;
     min-width: 16px;
     transform: translateX(0px) translateY(0px) scale(1) rotate(0deg);
-    margin-right: 324px;
+    margin-right: calc(((100% - 1140px) / 2) + 424px);
   }
 
   .u-header .u-menu-1 {
-    margin-top: -49px;
-    margin-left: 15px;
+    margin-top: -92px;
+    margin-right: calc(((100% - 1140px) / 2) + -243px);
+    margin-left: auto;
   }
 }
 @media (max-width: 991px) {
   .u-header .u-social-icons-1 {
-    margin-right: auto;
-    margin-left: 456px;
+    margin-right: calc(((100% - 1140px) / 2) + 444px);
   }
 
   .u-header .u-menu-1 {
-    margin-left: 125px;
+    margin-right: calc(((100% - 1140px) / 2) + -463px);
   }
 }
 @media (max-width: 767px) {
   .u-header .u-social-icons-1 {
-    margin-left: 555px;
+    margin-right: calc(((100% - 1140px) / 2) + 255px);
   }
 
   .u-header .u-menu-1 {
-    margin-bottom: 7px;
-    margin-left: 215px;
+    margin-right: calc(((100% - 1140px) / 2) + -342px);
+    margin-bottom: 39px;
   }
 }
 @media (max-width: 575px) {
+  .u-header .u-social-icons-1 {
+    margin-right: calc(((100% - 1140px) / 2) + 155px);
+  }
+
   .u-header .u-menu-1 {
-    margin-left: 315px;
+    margin-right: calc(((100% - 1140px) / 2) + -542px);
   }
 }
 .u-header .u-social-icons-1, .u-header .u-social-icons-1:before, .u-header .u-social-icons-1 > .u-container-layout:before {
