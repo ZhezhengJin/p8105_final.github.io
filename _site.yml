@@ -11,10 +11,12 @@ navbar:
       href: Related.html
     - text: "Our Data"
       href: Data.html
-    - text: "Data Visualized"
+    - text: "EDA"
       href: EDA.html
+    - text: "Statistical Regression"
+      href: Regression.html
     - text: "Discussion"
-      href: Disscussion.html
+      href: Discussion.html
     - text: "Shiny App"
       href: https://zj2358.shinyapps.io/birthweight_shiny/
     - icon: fa-envelope fa-lg

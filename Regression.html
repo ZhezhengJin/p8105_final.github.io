@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Regression.knit</title>
+
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="Report.html">Project Report</a>
+</li>
+<li>
+  <a href="Motivation.html">Motivation</a>
+</li>
+<li>
+  <a href="Related.html">Inspiration</a>
+</li>
+<li>
+  <a href="Data.html">Our Data</a>
+</li>
+<li>
+  <a href="EDA.html">EDA</a>
+</li>
+<li>
+  <a href="Regression.html">Statistical Regression</a>
+</li>
+<li>
+  <a href="Discussion.html">Discussion</a>
+</li>
+<li>
+  <a href="https://zj2358.shinyapps.io/birthweight_shiny/">Shiny App</a>
+</li>
+<li>
+  <a href="mailto:zj2358@cumc.columbia.edu,kl3453@cumc.columbia.edu,nl2836@cumc.columbia.edu,dqn2104@cumc.columbia.edu">
+    <span class="fa fa-evenlope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a>
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://github.com/ZhezhengJin/p8105_final.github.io">Website Repository</a>
+    </li>
+    <li>
+      <a href="https://github.com/duong-nguyen-54/final_proposal.git">Report Repository</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+
+<style type="text/css">
+/* Style for the main tabs */
+.nav-tabs > li > a {
+  background-color: #A3C4E5; 
+  color: #5F5B57; 
+}
+
+/* Style for the active main tab */
+.nav-tabs > li.active > a {
+  background-color: #4276AA; 
+  color: #ffffff; 
+}
+
+/* Style for the sub-tabs */
+.tab-content .tab-pane .nav > li > a {
+  background-color: #D2D2D2; 
+  color: #3E3D3D; 
+}
+
+/* Style for the active sub-tab */
+.tab-content .tab-pane .nav > li.active > a {
+  background-color: #6D6D6D; 
+  color: #ffffff; 
+}
+</style>
+<div id="statistical-analysis" class="section level1">
+<h1>Statistical Analysis</h1>
+<div id="method" class="section level2">
+<h2>Method</h2>
+<p>After cleaning the data, we then look at the effect that the annual
+concentration of pm 2.5 separately has on multiple outcomes among 62
+counties in New York, including low birth weight rate, premature birth
+rate, cancer mortality rate, asthma-related hospitalization rate, and
+cardiovascular-disease-related hospitalization rate.</p>
+<p>Since all of the outcomes are measured as rates (i.e., continuous),
+we use <strong>linear regression (LR) models</strong> to assess the
+effect of annual concentration of pm 2.5 on the outcomes of interests,
+adjusting for age, sex, ethnicity, education, income. In our models:</p>
+<ul>
+<li><p>Age is reported as a continuous variable that reflects the median
+age of each county.</p></li>
+<li><p>Sex is reported as a continuous variable that reflects the
+percentage of male in each county. The variable that reflects the
+percentage of female in each county is not included in our model to
+avoid perfect multicollinearity.</p></li>
+<li><p>Ethnicity is reported as a continuous variable that reflects the
+percentage of different ethnicity groups in each county, including
+Hispanic-Black, Hispanic-White, non-Hispanic-Black, non-Hispanic-White,
+and Others (if Asian, Native American, or belong to two or more race).
+The variable that reflects the percentage of people who belong to the
+category Others is not included in our model to avoid perfect
+multicollinearity.</p></li>
+<li><p>Education is reported as a continuous variable that reflects the
+percentage of people who have obtained one or more higher education
+degrees in each county.</p></li>
+<li><p>Income is reported as a continuous variable that reflects the
+percentage of household of each county that have annual income exceeding
+$75,000.</p></li>
+</ul>
+<p>For each of the five outcomes of interest, we first start with the
+full model:</p>
+<p><em>Outcome = Annual pm 2.5 concentration + median age + percentage
+of male + percentage of Hispanic-Black + percentage of Hispanic-White +
+percentage of non-Hispanic-Black + percentage of non-Hispanic-White +
+percentage of household income exceeding 75,000 USD + percentage of
+people obtained higher education</em></p>
+<p>We then perform <strong>bidirectional stepwise selection</strong> on
+all five models and output the best models. The full model and the
+resulting best models after stepwise selection for each outcome are
+detailed below:</p>
+</div>
+<div id="lr-models-by-outcomes"
+class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">LR models by Outcomes</h2>
+<div id="low-birth-weight-rate" class="section level3">
+<h3>Low Birth Weight Rate</h3>
+<div id="stepwise-regression" class="section level4">
+<h4>Stepwise regression</h4>
+<p><strong>Full model</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_birthweight_adjusted &lt;-lm(percent_lowbirthweight ~ annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)</code></pre>
+<p><strong>Stepwise selection</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_birthweight_adjusted_best &lt;- step(lm_pm2.5_birthweight_adjusted, direction = &#39;both&#39;, trace=FALSE)
+
+summary(lm_pm2.5_birthweight_adjusted_best)%&gt;%
+  tab_model()</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+percent lowbirthweight
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+11.53
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+7.18 – 15.88
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+median age
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.11
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.21 – -0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.024</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent non hisp black
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+8.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.34 – 14.76
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.019</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+62
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.274 / 0.249
+</td>
+</tr>
+</table>
+</div>
+<div id="interpretation" class="section level4">
+<h4>Interpretation</h4>
+<p>The best model that was outputted by the stepwise regression is</p>
+<p><em>low birth weight = 11.53 - 0.11(median age) + 8.05
+(percent_non_hisp_black)</em></p>
+<ul>
+<li><p>On average, for a county whose median age is 0 and has 0% of
+non-Hispanic-Black, the expected low birth weight rate is 11.5% (no
+practical meaning). Since the p-value is smaller than 0.05, we have
+sufficient evidence to claim that the intercept is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of median age (1 year), the
+expected low birth weight rate of the county decreases by 0.11%. Since
+the p-value is smaller than 0.05, we have sufficient evidence to claim
+that the beta coefficient for median age is significantly different than
+0.</p></li>
+<li><p>On average, for every unit increase in the percentage of
+non-Hispanic-Black, the expected low birth weight rate of the county
+increases by 8.05%. Since the p-value is smaller than 0.05, we have
+sufficient evidence to claim that the beta coefficient for percentage of
+non-Hispanic-Black is significantly different than 0.</p></li>
+</ul>
+<p>The adjusted R-squared of 0.249 implies that 24.9% of the variation
+in the response variable can be explained by its linear relationship
+with the set of the 2 predictors (median age and percentage of
+non-Hispanic-Black).</p>
+</div>
+</div>
+<div id="premature-birth-weight-rate" class="section level3">
+<h3>Premature Birth Weight Rate</h3>
+<div id="stepwise-regression-1" class="section level4">
+<h4>Stepwise regression</h4>
+<p><strong>Full model</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_premature_adjusted &lt;-lm(premature_percentage ~ annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)</code></pre>
+<p><strong>Stepwise selection</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_premature_adjusted_best &lt;- step(lm_pm2.5_premature_adjusted, direction = &#39;both&#39;, trace=FALSE)
+
+summary(lm_pm2.5_premature_adjusted_best)%&gt;%
+  tab_model()</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+premature percentage
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+4.88
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.96 – 8.80
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.016</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+median age
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01 – 0.17
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.067
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent non hisp black
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+8.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.63 – 13.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.004</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+61
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.135 / 0.105
+</td>
+</tr>
+</table>
+</div>
+<div id="interpretation-1" class="section level4">
+<h4>Interpretation</h4>
+<p>The best model that was outputted by the stepwise regression is</p>
+<p><em>premature birth weight = 4.88 + 0.08(median age) + 8.03
+(percent_non_hisp_black)</em></p>
+<ul>
+<li><p>On average, for a county whose median age is 0 and has 0% of
+non-Hispanic-Black, the expected low birth weight rate is 4.88% (no
+practical meaning). Since the p-value is smaller than 0.05, we have
+sufficient evidence to claim that the intercept is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of median age (1 year), the
+expected low birth weight rate of the county decreases by 0.11%.
+However, since the p-value is larger than 0.05, we do not have
+sufficient evidence to claim that the beta coefficient for median age is
+significantly different than 0.</p></li>
+<li><p>On average, for every unit increase in the percentage of
+non-Hispanic-Black, the expected low birth weight rate of the county
+increases by 8.03%. Since the p-value is smaller than 0.05, we have
+sufficient evidence to claim that the beta coefficient for percentage of
+non-Hispanic-Black is significantly different than 0.</p></li>
+</ul>
+<p>The adjusted R-squared of 0.105 implies that 10.5% of the variation
+in the response variable can be explained by its linear relationship
+with the set of the 2 predictors (median age and percentage of
+non-Hispanic-Black).</p>
+</div>
+</div>
+<div id="cancer-mortality-rate"
+class="section level3 tabset tabset-fade">
+<h3 class="tabset tabset-fade">Cancer Mortality Rate</h3>
+<p>Detailed below are the the initial model, the final model and the
+interpretation for each outcome.</p>
+<div id="stepwise-regression-2" class="section level4">
+<h4>Stepwise regression</h4>
+<p><strong>Full model</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_cancer_adjusted &lt;-lm(cancer_mortality_per_10k ~annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)</code></pre>
+<p><strong>Stepwise selection</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_cancer_adjusted_best&lt;-step(lm_pm2.5_cancer_adjusted, direction = &#39;both&#39;, trace=FALSE)
+
+summary (lm_pm2.5_cancer_adjusted_best)%&gt;%
+  tab_model()</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+cancer mortality per 10 k
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.18
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-51.73 – 51.36
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.994
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+annual pm2 5
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.33
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.10 – 2.55
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.035</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+median age
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.31
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.98 – 1.65
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent high income
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-21.35
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-37.32 – -5.38
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.010</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent non hisp white
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+46.40
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+20.09 – 72.71
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent non hisp black
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+53.63
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.27 – 104.99
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.041</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent hisp white
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+102.38
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+10.35 – 194.41
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.030</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent hisp black
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-178.74
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-417.28 – 59.79
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.139
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent male
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-57.41
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-140.92 – 26.09
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.174
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+61
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.809 / 0.780
+</td>
+</tr>
+</table>
+</div>
+<div id="interpretation-2" class="section level4">
+<h4>Interpretation</h4>
+<p>The best model that was outputted by the stepwise regression is</p>
+<p><em>cancer mortality rate = -1.85 + 13.27(annual pm 2.5) +
+13.14(median age) - 213.49(percent high income) + 464.03(percent non
+hisp white) + 536.28(percent non hisp black) + 1023.82(percent hisp
+white) - 1787.43(percent hisp black) - 574.15(percent male)</em></p>
+<ul>
+<li><p>On average, for a county whose annual pm 2.5 concentration is 0,
+median age is 0, has 0% of high income, has 0% of non-Hispanic-Black,
+has 0% of non-Hispanic-White, has 0% of Hispanic-Black, has 0% of
+Hispanic-White, has 0% of male, the expected low birth weight rate is
+-1.85 case per 10,000 people (no practical meaning). However, since the
+p-value is larger than 0.05, we do not have sufficient evidence to claim
+that the intercept is significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of annual pm 2.5
+concentration, the expected cancer mortality rate of the county
+increases by 13.27 deaths per 10,000 people. Since the p-value is
+smaller than 0.05, we have sufficient evidence to claim that the beta
+coefficient for annual pm 2.5 concentration is significantly different
+than 0.</p></li>
+<li><p>On average, for every unit increase of median age (1 year), the
+expected cancer mortality rate of the county decreases by 13.14 cases
+per 10,000 people. Since the p-value is smaller than 0.05, we have
+sufficient evidence to claim that the beta coefficient for median age is
+significantly different than 0.</p></li>
+<li><p>On average, for every unit increase in the percentage of high
+income, the expected cancer mortality rate of the county decreases by
+213.49 cases per 10,000 people. Since the p-value is smaller than 0.05,
+we have sufficient evidence to claim that the beta coefficient for
+percentage of high income is significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage of
+non-Hispanic-White, the expected cancer mortality rate of the county
+increases by 464.03 deaths per 10,000 people. Since the p-value is
+smaller than 0.05, we have sufficient evidence to claim that the beta
+coefficient for percentage of non-Hispanic-White is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage of
+non-Hispanic-Black, the expected cancer mortality rate of the county
+increases by 536.28 deaths per 10,000 people. Since the p-value is
+smaller than 0.05, we have sufficient evidence to claim that the beta
+coefficient for percentage of non-Hispanic-Black is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage Hispanic-White,
+the expected cancer mortality rate of the county increases by 1023.08
+deaths per 10,000 people. Since the p-value is smaller than 0.05, we
+have sufficient evidence to claim that the beta coefficient for
+percentage of Hispanic-White is significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage Hispanic-Black,
+the expected cancer mortality rate of the county decreases by 1787.43
+deaths per 10,000 people. However, since the p-value is larger than
+0.05, we do not have sufficient evidence to claim that the beta
+coefficient percentage of Hispanic-Black is significantly different than
+0.</p></li>
+<li><p>On average, for every unit increase of percentage of male, the
+expected cancer mortality rate of the county decreases by 574.15 deaths
+per 10,000 people. However, since the p-value is larger than 0.05, we do
+not have sufficient evidence to claim that the beta coefficient for the
+percentage of male is significantly different than 0.</p></li>
+</ul>
+<p>The adjusted R-squared of 0.780 implies that 70.8% of the variation
+in the response variable can be explained by its linear relationship
+with the set of the 8 predictors (annual pm 2.5 conc., median age,
+percentage of high income, percentage of 4 ethnicity groups, percentage
+of male).</p>
+</div>
+</div>
+<div id="asthma-hospitalization-rate"
+class="section level3 tabset tabset-fade">
+<h3 class="tabset tabset-fade">Asthma Hospitalization Rate</h3>
+<p>Detailed below are the the initial model, the final model and the
+interpretation for each outcome.</p>
+<div id="stepwise-regression-3" class="section level4">
+<h4>Stepwise regression</h4>
+<p><strong>Full model</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_asthma_adjusted &lt;-lm(asthma_hosp_rate_per_10k ~ annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)</code></pre>
+<p><strong>Stepwise selection</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_asthma_adjusted_best &lt;- step(lm_pm2.5_asthma_adjusted, direction = &#39;both&#39;, trace=FALSE)
+
+summary(lm_pm2.5_asthma_adjusted_best)%&gt;%
+  tab_model()</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+asthma hosp rate per 10 k
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.36
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.06 – 2.67
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.041</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent high income
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+4.65
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.32 – 8.99
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.036</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent non hisp black
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+13.52
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+5.77 – 21.26
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent hisp black
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+366.67
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+314.84 – 418.50
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percentage high education
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-5.31
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-9.55 – -1.06
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.015</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+59
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.935 / 0.930
+</td>
+</tr>
+</table>
+</div>
+<div id="interpretation-3" class="section level4">
+<h4>Interpretation</h4>
+<p>The best model that was outputted by the stepwise regression is</p>
+<p><em>asthma hospitalization rate = 1.36 + 4.65(percent high income) +
+13.52(percent non hisp black) + 366.67 (percent hisp black) -
+5.31(percent high education)</em></p>
+<ul>
+<li><p>On average, for a county who has zero percent of high income, has
+zero percent of non-Hispanic-Black, has zero percent of Hispanic-Black,
+has zero percent of high education, the expected asthma hospitalization
+rate is 1.85 case per 10,000 people (no practical meaning). Since the
+p-value is smaller han 0.05, we have sufficient evidence to claim that
+the intercept is significantly different than 0.</p></li>
+<li><p>On average, for every unit increase in the percentage of high
+income, the expected asthma hospitalization rate of the county increases
+by 4.65 cases per 10,000 people. Since the p-value is smaller than 0.05,
+we have sufficient evidence to claim that the beta coefficient for the
+percentage of high incomeis significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage of
+non-Hispanic-Black, the expected cancer mortality rate of the county
+increases by 13.52 deaths per 10,000 people. Since the p-value is
+smaller than 0.05, we have sufficient evidence to claim that the beta
+coefficient for the percentage of non-Hispanic-Black is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage of
+Hispanic-Black, the expected cancer mortality rate of the county
+increases by 366.67 deaths per 10,000 people. Since the p-value is
+smaller than 0.05, we have sufficient evidence to claim that the beta
+coefficient for the percentage of Hispanic-Black is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage of high
+education, the expected cancer mortality rate of the county decreases by
+5.31 deaths per 10,000 people. Since the p-value is smaller than 0.05,
+we have sufficient evidence to claim that the beta coefficient for the
+percentage of higher education is significantly different than
+0.</p></li>
+</ul>
+<p>The adjusted R-squared of 0.930 implies that 93.0% of the variation
+in the response variable can be explained by its linear relationship
+with the set of the 4 predictors (percentage of high income, percentage
+of non-Hispanic-Black, percentage of Hispanic-Black, percentage of
+higher education).</p>
+</div>
+</div>
+<div id="cardiovascular-disease-rate"
+class="section level3 tabset tabset-fade">
+<h3 class="tabset tabset-fade">Cardiovascular Disease Rate</h3>
+<p>Detailed below are the the initial model, the final model and the
+interpretation for each outcome.</p>
+<div id="stepwise-regression-4" class="section level4">
+<h4>Stepwise regression</h4>
+<p><strong>Full model</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_cardio_adjusted &lt;-lm(cardio_hosp_rate_per_10k ~annual_pm2.5 + median_age + percent_high_income + percent_non_hisp_white + percent_non_hisp_black + percent_hisp_white + percent_hisp_black + percentage_high_education + percent_male, data=merge)</code></pre>
+<p><strong>Stepwise selection</strong></p>
+<pre class="r fold-show"><code>lm_pm2.5_cardio_adjusted_best&lt;-step(lm_pm2.5_cardio_adjusted, direction = &#39;both&#39;, trace=FALSE)
+
+summary (lm_pm2.5_cardio_adjusted_best)%&gt;%
+  tab_model()</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+cardio hosp rate per 10 k
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+157.52
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-155.87 – 470.91
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.318
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+annual pm2 5
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+6.97
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.14 – 14.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.055
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+median age
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.73
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01 – 3.44
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.049</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent non hisp white
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+117.26
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-30.46 – 264.97
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.117
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent non hisp black
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+222.99
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-83.73 – 529.70
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.151
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent hisp white
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+439.56
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-49.52 – 928.63
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.077
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percentage high education
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-148.61
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-224.74 – -72.49
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+percent male
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-405.53
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-920.48 – 109.43
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.120
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+62
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.329 / 0.242
+</td>
+</tr>
+</table>
+</div>
+<div id="interpretation-4" class="section level4">
+<h4>Interpretation</h4>
+<p>The best model that was outputted by the stepwise regression is</p>
+<p><em>cardiovascular disease hospitalization rate = 157.52 +
+6.97(annual pm 2.5) + 1.73(median age) + 117.26 (percent non hisp white)
++ 222.99(percent non hisp black) + 439.56(percent hisp white) -
+148.61.43(percent high education) - 405.53(percent male)</em></p>
+<p>On average, for a county whose annual pm 2.5 concentration is 0,
+median age is 0, has zero percent of non-Hispanic-White, has zero
+percent of non-Hispanic-Black, has zero percent of Hispanic-White, has
+zero percent of high education, has zero percent of male, the expected
+cardiovascular disease hospitalization rate is 157.52 case per 10,000
+people (no practical meaning). However, since the p-value is larger than
+0.05, we do not have sufficient evidence to claim that the intercept is
+significantly different than 0.</p>
+<ul>
+<li><p>On average, for every unit increase of annual pm 2.5
+concentration, the expected cardiovascular disease hospitalization rate
+of the county increases by 6.97cases per 10,000 people. However, since
+the p-value is smaller than 0.05, we do not have sufficient evidence to
+claim that the beta coefficient for annual pm 2.5 concentration is
+significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of median age (1 year), the
+expected cardiovascular disease hospitalization rate of the county
+decreases by 1.73 cases per 10,000 people. Since the p-value is smaller
+than 0.05, we have sufficient evidence to claim that the beta
+coefficient for median age is significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of percent of
+non-Hispanic-White, the expected cardiovascular disease hospitalization
+rate of the county increases by 177.26 cases per 10,000 people. However,
+since the p-value is larger than 0.05, we do not have sufficient
+evidence to claim that the beta coefficient for the percent of
+non-Hispanic-White is significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of percent of
+non-Hispanic-Black, the expected cardiovascular disease hospitalization
+rate of the county increases by 222.99 cases per 10,000 people. However,
+since the p-value is larger than 0.05, we do not have sufficient
+evidence to claim that the beta coefficient for percent of
+non-Hispanic-Black is significantly different than 0.</p></li>
+<li><p>On average, for every unit increase of percent of Hispanic-White,
+the expected cardiovascular disease hospitalization rate of the county
+increases by 439.56 cases per 10,000 people. However, since the p-value
+is larger than 0.05, we do not have sufficient evidence to claim that
+the beta coefficient for percent of Hispanic-White is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of percent of higher
+education, the expected cardiovascular disease hospitalization rate of
+the county decreases by 148.61 cases per 10,000 people. Since the
+p-value is larger than 0.05, we have sufficient evidence to claim that
+the beta coefficient for percent of higher education is significantly
+different than 0.</p></li>
+<li><p>On average, for every unit increase of percentage of male, the
+expected cardiovascular disease hospitalization rate of the county
+decreases by 405.53 cases per 10,000 people. However, since the p-value
+is larger than 0.05, we do not have sufficient evidence to claim that
+the beta coefficient for percentage male is significantly different than
+0.</p></li>
+</ul>
+<p>The adjusted R-squared of 0.242 implies that 24.2% of the variation
+in the response variable can be explained by its linear relationship
+with the set of the 7 predictors (annual pm 2.5 concentration, median
+age, percent non-Hispanic-White, percent non-Hispanic-Black, percent
+Hispanic-White, percentage of higher education, percentage of male).</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
