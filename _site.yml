@@ -17,8 +17,14 @@ navbar:
       href: Disscussion.html
     - text: "Shiny App"
       href: https://zj2358.shinyapps.io/birthweight_shiny/
+    - icon: fa-evenlope fa-lg
+      href: 'mailto:zj2358@cumc.columbia.edu,kl3453@cumc.columbia.edu,nl2836@cumc.columbia.edu,dqn2104@cumc.columbia.edu'
     - icon: fa-github fa-lg
-      href: https://github.com/ZhezhengJin/p8105_final.github.io
+       menu:
+        text: "Website Repository"
+        href: https://github.com/ZhezhengJin/p8105_final.github.io
+        text: "Report Repository"
+        href: https://github.com/duong-nguyen-54/final_proposal.git
 output: 
   html_document:
     theme: journal
