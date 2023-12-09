@@ -3,34 +3,23 @@ output_dir: "."
 navbar:
    title: "Home"
    right:
-    - text: "About"
-      menu:
-       - text: "Birthweight and PM2.5 Concentration"
-         href: About.html
-       - text: "Us"
-         href: About_Us.html
     - text: "Report"
-      href: report.html
-    - text: "Data Analysis"
-      menu: 
-      - text: "Data"
+      href: Report.html
+      menu:
+      - text: "Full Lab Report"
+        href: Report.html
+      - text: "Motivation"
+        href: Motivation.html
+      - text: "Inspiration"
+        href: Related.html
+      - text: "Our Data"
         href: Data.html
-      - text: "EDA"
-        href: eda.html      
-      - text: "Regression Model"
-        href: Regression.html
-      - text: "Results Summary"
-        href: results.html
-      - text: "Conclusion"
-        href: conclusion.html
+      - text: "Our Data Visualized"
+        href: EDA.html
     - text: "Shiny App"
       href: https://zj2358.shinyapps.io/birthweight_shiny/
-    - icon: fa-youtube fa-lg
-      href: https://www.youtube.com/watch?v=nDCHMyNOjHM
     - icon: fa-github fa-lg
       href: https://github.com/ZhezhengJin/p8105_final.github.io
-    - icon: fa-envelope fa-lg
-      href: "mailto:zj2358@cumc.columbia.edu,kl3453@cumc.columbia.edu,nl2836@cumc.columbia.edu,dqn2104@cumc.columbia.edu"
 output: 
   html_document:
     theme: journal

@@ -61,7 +61,6 @@
   font-size: 1.125rem;
   letter-spacing: 2px;
   --radius: 50px;
-  box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.4);
   --animation-custom_in-translate_x: 0px;
   --animation-custom_in-translate_y: 0px;
   --animation-custom_in-opacity: 0;
@@ -87,4 +86,9 @@
   .u-section-2 .u-text-1 {
     width: 340px;
   }
+}@font-face {
+  font-family: 'NewsCycle-Bold';
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/NewsCycle-Bold.ttf);
 }
