@@ -3,19 +3,16 @@ output_dir: "."
 navbar:
    title: "Home"
    right:
-    - text: "Report"
+    - text: "Project Report"
       href: Report.html
-      menu:
-      - text: "Full Lab Report"
-        href: Report.html
-      - text: "Motivation"
-        href: Motivation.html
-      - text: "Inspiration"
-        href: Related.html
-      - text: "Our Data"
-        href: Data.html
-      - text: "Our Data Visualized"
-        href: EDA.html
+    - text: "Motivation"
+      href: Motivation.html
+    - text: "Inspiration"
+      href: Related.html
+    - text: "Our Data"
+      href: Data.html
+    - text: "Our Data Visualized"
+      href: EDA.html
     - text: "Shiny App"
       href: https://zj2358.shinyapps.io/birthweight_shiny/
     - icon: fa-github fa-lg
