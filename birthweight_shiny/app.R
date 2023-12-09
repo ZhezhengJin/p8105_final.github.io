@@ -104,10 +104,22 @@ ui <- fluidPage(
                  DT::dataTableOutput("comparisonTable"),
                  tags$p("This interactive table compares selected counties, showcasing average PM2.5 levels and health statistics to highlight environmental and public health disparities across New York.")),
         
-        tabPanel("PM2.5 Bar Chart", 
+        tabPanel("PM2.5 Level Ranking", 
                  plotlyOutput("barChart"),
-                 tags$p("This interactive bar chart displays the annual average PM2.5 concentration across the top 20 counties in New York, where PM2.5 are tiny atmospheric particles less than 2.5 micrometers in diameter. The chart ranks counties in descending order of PM2.5 levels, emphasizing those with the highest concentrations. Hovering over each bar reveals the exact PM2.5 value for that county."))
-      )
+                 tags$p("This interactive bar chart displays the annual average PM2.5 concentration across the top 20 counties in New York, where PM2.5 are tiny atmospheric particles less than 2.5 micrometers in diameter. The chart ranks counties in descending order of PM2.5 levels, emphasizing those with the highest concentrations. Hovering over each bar reveals the exact PM2.5 value for that county.")),
+       
+         tabPanel("Percentage of High Income", 
+                 plotlyOutput("highIncomePlot"),
+                 tags$p("This bar chart displays the percentage of high-income residents in each New York county, allowing for economic demographic analysis.")),
+        
+        tabPanel("Racial Composition", 
+                 plotlyOutput("racialCompositionPlot"),
+                 tags$p("This stacked bar chart shows the racial composition of each New York county, providing insights into demographic diversity.")),
+        
+        tabPanel("Percentage of LBR", 
+                 plotlyOutput("lowBirthweightPlot"),
+                 tags$p("This scatter plot illustrates the rate of low birthweight across New York counties, highlighting public health issues related to childbirth."))
+        )
     )
   )
 )
@@ -174,7 +186,7 @@ server <- function(input, output) {
     DT::datatable(selected_data, options = list(pageLength = 5))
   })
   
-  # Bar chart
+  # PM2.5 Level Ranking
   output$barChart <- renderPlotly({
     # Prepare the data: sort the dataframe by 'annual_pm2.5' and get the top 20
     sorted_data <- ny_map %>%
@@ -199,6 +211,57 @@ server <- function(input, output) {
       )
     
     fig
+  })
+  
+  # High Income Plot
+  output$highIncomePlot <- renderPlotly({
+    ny_map %>%
+      plot_ly(
+        x = ~reorder(county, percent_high_income),
+        y = ~percent_high_income,
+        type = "bar",
+        marker = list(color = "red1")
+      ) %>%
+      layout(
+        title = "Percentage of High Income",
+        xaxis = list(title = "County Name", categoryorder = "total descending", tickangle = 45),
+        yaxis = list(title = "Percentage"),
+        barmode = "stack"
+      )
+  })
+  
+  # Racial Composition Plot
+  output$racialCompositionPlot <- renderPlotly({
+    race_plot <- ny_map %>% 
+      select(county, percent_non_hisp_white, percent_non_hisp_black, percent_hisp_white, percent_hisp_black, percent_other) %>%
+      pivot_longer(
+        cols = starts_with("percent_"), names_to = "race", values_to = "percentage") 
+    
+    race_plot %>%
+      plot_ly(x = ~county, y = ~percentage, type = "bar", color = ~race, colors = "RdYlGn", hoverinfo = "y+name") %>% 
+      layout(barmode = "stack",
+             title = "Racial Composition in NY County",
+             xaxis = list(title = "County", tickangle = 45),
+             yaxis = list(title = "Percentage (%)"))
+  })
+  
+  # Rate of Low Birthweight Plot
+  output$lowBirthweightPlot <- renderPlotly({
+    ny_map %>%
+      drop_na() %>%
+      plot_ly(
+        x = ~county,
+        y = ~percent_lowbirthweight,
+        color = ~county,
+        type = "scatter",
+        mode = "markers"
+      ) %>%
+      layout(
+        title = "Rate of Low Birthweight",
+        xaxis = list(title = "County", tickangle = 45),
+        yaxis = list(title = "Percentage of Low Birthweight"),
+        showlegend = FALSE
+      )
   })
 }
 
