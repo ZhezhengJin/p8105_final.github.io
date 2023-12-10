@@ -5,7 +5,7 @@ account: zj2358
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10739924
-bundleId: 8023033
+bundleId: 8029759
 url: https://zj2358.shinyapps.io/birthweight_shiny/
 version: 1
 asMultiple: FALSE

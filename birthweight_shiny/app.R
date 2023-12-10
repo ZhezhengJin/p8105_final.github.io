@@ -115,10 +115,6 @@ ui <- fluidPage(
         tabPanel("Racial Composition", 
                  plotlyOutput("racialCompositionPlot"),
                  tags$p("This stacked bar chart shows the racial composition of each New York county, providing insights into demographic diversity.")),
-        
-        tabPanel("Percentage of LBR", 
-                 plotlyOutput("lowBirthweightPlot"),
-                 tags$p("This scatter plot illustrates the rate of low birthweight across New York counties, highlighting public health issues related to childbirth."))
         )
     )
   )
@@ -243,25 +239,6 @@ server <- function(input, output) {
              title = "Racial Composition in NY County",
              xaxis = list(title = "County", tickangle = 45),
              yaxis = list(title = "Percentage (%)"))
-  })
-  
-  # Rate of Low Birthweight Plot
-  output$lowBirthweightPlot <- renderPlotly({
-    ny_map %>%
-      drop_na() %>%
-      plot_ly(
-        x = ~county,
-        y = ~percent_lowbirthweight,
-        color = ~county,
-        type = "scatter",
-        mode = "markers"
-      ) %>%
-      layout(
-        title = "Rate of Low Birthweight",
-        xaxis = list(title = "County", tickangle = 45),
-        yaxis = list(title = "Percentage of Low Birthweight"),
-        showlegend = FALSE
-      )
   })
 }
 
