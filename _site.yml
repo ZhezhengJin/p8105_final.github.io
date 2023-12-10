@@ -9,7 +9,9 @@ navbar:
       href: Motivation.html
     - text: "Inspiration"
       href: Related.html
-    - text: "Our Data"
+    - text: "Question"
+      href: Question.html
+    - text: "Data"
       href: Data.html
     - text: "EDA"
       href: EDA.html

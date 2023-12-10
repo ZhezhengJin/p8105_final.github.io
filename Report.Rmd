@@ -928,25 +928,25 @@ summary (lm_pm2.5_cancer_adjusted_best)%>%
 
 The best model that was outputted by the stepwise regression is 
 
-_cancer mortality rate = -1.85 + 13.27(annual pm 2.5) + 13.14(median age) - 213.49(percent high income) + 464.03(percent non hisp white) + 536.28(percent non hisp black) +  1023.82(percent hisp white) - 1787.43(percent hisp black) - 574.15(percent male)_
+_cancer mortality rate = -0.18 + 1.33(annual pm 2.5) + 1.31(median age) - 21.35 (percent high income) + 46.40 (percent non hisp white) + 53.63 (percent non hisp black) +  102.38 (percent hisp white) - 178.74 (percent hisp black) - 57.41 (percent male)_
 
-- On average, for a county whose annual pm 2.5 concentration is 0, median age is 0, has 0% of high income, has 0% of non-Hispanic-Black, has 0% of non-Hispanic-White, has 0% of Hispanic-Black, has 0% of Hispanic-White, has 0% of male, the expected low birth weight rate is -1.85 case per 10,000 people (no practical meaning). However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the intercept is significantly different than 0.
+- On average, for a county whose annual pm 2.5 concentration is 0, median age is 0, has 0% of high income, has 0% of non-Hispanic-Black, has 0% of non-Hispanic-White, has 0% of Hispanic-Black, has 0% of Hispanic-White, has 0% of male, the expected low birth weight rate is -0.18 case per 10,000 people (no practical meaning). However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the intercept is significantly different than 0.
 
-- On average, for every unit increase of annual pm 2.5 concentration, the expected cancer mortality rate of the county increases by 13.27 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for annual pm 2.5 concentration is significantly different than 0. 
+- On average, for every unit increase of annual pm 2.5 concentration, the expected cancer mortality rate of the county increases by 1.33 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for annual pm 2.5 concentration is significantly different than 0. 
 
-- On average, for every unit increase of median age (1 year), the expected cancer mortality rate of the county decreases by 13.14 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0. 
+- On average, for every unit increase of median age (1 year), the expected cancer mortality rate of the county decreases by 1.31 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for median age is significantly different than 0. 
 
-- On average, for every unit increase in the percentage of high income, the expected cancer mortality rate of the county decreases by 213.49 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of high income is significantly different than 0.
+- On average, for every unit increase in the percentage of high income, the expected cancer mortality rate of the county decreases by 21.35 cases per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of high income is significantly different than 0.
 
-- On average, for every unit increase of percentage of non-Hispanic-White, the expected cancer mortality rate of the county increases by 464.03 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-White is significantly different than 0. 
+- On average, for every unit increase of percentage of non-Hispanic-White, the expected cancer mortality rate of the county increases by 46.40 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-White is significantly different than 0. 
 
-- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 536.28 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-Black is significantly different than 0. 
+- On average, for every unit increase of percentage of non-Hispanic-Black, the expected cancer mortality rate of the county increases by 53.63 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of non-Hispanic-Black is significantly different than 0. 
 
-- On average, for every unit increase of percentage Hispanic-White, the expected cancer mortality rate of the county increases by 1023.08 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of Hispanic-White is significantly different than 0. 
+- On average, for every unit increase of percentage Hispanic-White, the expected cancer mortality rate of the county increases by 102.38 deaths per 10,000 people. Since the p-value is smaller than 0.05, we have sufficient evidence to claim that the beta coefficient for percentage of Hispanic-White is significantly different than 0. 
 
-- On average, for every unit increase of percentage Hispanic-Black, the expected cancer mortality rate of the county decreases by 1787.43 deaths per 10,000 people.  However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient percentage of Hispanic-Black is significantly different than 0.
+- On average, for every unit increase of percentage Hispanic-Black, the expected cancer mortality rate of the county decreases by 178.74 deaths per 10,000 people.  However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient percentage of Hispanic-Black is significantly different than 0.
 
-- On average, for every unit increase of percentage of male, the expected cancer mortality rate of the county decreases by 574.15 deaths per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for the percentage of male is significantly different than 0.
+- On average, for every unit increase of percentage of male, the expected cancer mortality rate of the county decreases by 57.41 deaths per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for the percentage of male is significantly different than 0.
 
 The adjusted R-squared of 0.780 implies that 70.8% of the variation in the response variable can be explained by its linear relationship with the set of the 8 predictors (annual pm 2.5 conc., median age, percentage of high income, percentage of 4 ethnicity groups, percentage of male).
 
@@ -1027,7 +1027,6 @@ On average, for a county whose annual pm 2.5 concentration is 0, median age is 0
 - On average, for every unit increase of percentage of male, the expected cardiovascular disease hospitalization rate of the county decreases by 405.53 cases per 10,000 people. However, since the p-value is larger than 0.05, we do not have sufficient evidence to claim that the beta coefficient for percentage male is significantly different than 0. 
 
 The adjusted R-squared of 0.242 implies that 24.2% of the variation in the response variable can be explained by its linear relationship with the set of the 7 predictors (annual pm 2.5 concentration, median age, percent non-Hispanic-White, percent non-Hispanic-Black, percent Hispanic-White, percentage of higher education, percentage of male).
-
 # Discussion
 
 The stepwie selected models produced from the data based on one of 5 outcomes selected (Low Birth Weight Rate, Premature Birth Weight Rate, Cancer Mortality Rate, Asthma Hospitalization Rate, and Cardiovascular Disease Rate), are dissimilar on the different estimate parameters they fit at first glance. However upon closer inspection, there are certain estimate parameters that are shared amongst these models which may have significant implications on health outcome disparities. Though it is important to keep in mind that these models merely illustrate an association.
